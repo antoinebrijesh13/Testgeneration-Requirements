@@ -65,12 +65,6 @@ h1 { font-size: clamp(23px, 2.8vw, 29px); font-weight: 600; letter-spacing: -.01
 .card.chosen .statement { font-weight: 500; }
 .card.hidden { display: none; }
 
-.detail { margin-top: 11px; padding-top: 10px; border-top: 1px solid var(--rule); display: grid; gap: 7px; }
-.detail-row { display: grid; grid-template-columns: 56px 1fr; gap: 10px; align-items: start; }
-.detail-row dt { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); padding-top: 2px; }
-.detail-row dd { margin: 0; font-size: 13.5px; color: var(--mid); line-height: 1.45; }
-.detail-row dd.src { font-family: var(--mono); font-size: 12px; word-break: break-word; }
-
 @media (max-width: 880px) {
   .board { grid-template-columns: 1fr; gap: 24px; }
   .readout { margin-left: 0; width: 100%; text-align: left; }
@@ -107,58 +101,19 @@ const PHASES = [
 ];
 
 const SYS = {
-  "SYS-01": { s: "The pipeline shall identify the buggy version, the fixed version, the test that already shows the bug, and the environment both versions run in.",
-    why: "Everything after this depends on the right two versions and a working environment.",
-    check: "All four are named and exist before anything is generated.",
-    src: "bug_context.py: resolve_bug_context / resolve_env_python" },
-  "SYS-02": { s: "The pipeline shall stop with a stated reason if any of those four is missing or unusable.",
-    why: "Fail at set-up, not halfway through validation.",
-    check: "Remove the environment; the run stops at set-up with a clear message.",
-    src: "bug_context.py: resolve_bug_context" },
-  "SYS-03": { s: "The pipeline shall run the test that shows the bug and record what failed and where.",
-    why: "Every later stage is built from this recorded failure.",
-    check: "The record names the file, line, exception and the method that broke.",
-    src: "step1_bug_analysis.py: build_step1_output" },
-  "SYS-04": { s: "The pipeline shall generate each test from the recorded facts for that bug.",
-    why: "Stop the model inventing tests that never touch the fault.",
-    check: "The generation input contains those facts and they belong to the same bug.",
-    src: "benchmark_test_info.py · call_chain_info.py · generation_guidance.py" },
-  "SYS-05": { s: "The pipeline shall generate two kinds of tests: tests that catch the bug, and tests that check working behaviour.",
-    why: "A patch can under-fix or over-fix; each kind catches one of those.",
-    check: "Run one bug; both kinds are present, or the reason one is missing is recorded.",
-    src: "negative_test_generation.py / positive_test_generation.py" },
-  "SYS-06": { s: "The pipeline shall run each test on both the buggy code and the fixed code.",
-    why: "The difference between the two runs is the whole oracle.",
-    check: "Every accepted test has two saved results, one per version.",
-    src: "validate_tests.py: validate_negative / validate_positive" },
-  "SYS-07": { s: "The pipeline shall stop any test that runs longer than its time limit.",
-    why: "Bound a stuck test instead of blocking the run.",
-    check: "A hanging test is cut off at the limit and marked a timeout, not a failure.",
-    src: "validate_tests.py: timed_run — VALIDATE_TEST_TIMEOUT, default 120s" },
-  "SYS-08": { s: "The pipeline shall check that the test actually ran the broken part of the code.",
-    why: "Reject tests that pass or fail for unrelated reasons.",
-    check: "Every accepted test records which evidence satisfied the check.",
-    src: "validate_tests.py — exact line, method range or traceback text" },
-  "SYS-09": { s: "The pipeline shall accept or reject each test using a written rule for its kind.",
-    why: "Acceptance must be repeatable by a second person.",
-    check: "One known good and one known bad test per kind; the decision matches the rule.",
-    src: "validate_tests.py · iterative_generation.py: AcceptanceCriteria" },
-  "SYS-10": { s: "The pipeline shall feed the reason for rejection into the next try.",
-    why: "Let execution results correct the next candidate.",
-    check: "The next prompt contains the previous rejection and its output.",
-    src: "iterative_generation.py: generate_one / FailureRecord.for_prompt" },
-  "SYS-11": { s: "The pipeline shall stop after a set number of tries per bug.",
-    why: "Make run effort predictable before the run starts.",
-    check: "Set the limit to two on a bug that accepts nothing; exactly two tries happen.",
-    src: "iterative_generation.py: iterate — target 5, 15 attempts, streak limit 3" },
-  "SYS-12": { s: "The pipeline shall record what happened on every try.",
-    why: "Explain both complete and partial runs.",
-    check: "The saved outcomes add up to the number of tries.",
-    src: "iterative_generation.py: AttemptRecord / persist_outputs" },
-  "SYS-13": { s: "The pipeline shall save, with each accepted test, the settings and evidence used to make it.",
-    why: "A result that cannot be traced cannot be defended.",
-    check: "From the saved files alone, identify the code version, settings and run.",
-    src: "iterative_generation.py: persist_outputs" }
+  "SYS-01": { s: "The pipeline shall identify the buggy version, the fixed version, the test that already shows the bug, and the environment both versions run in." },
+  "SYS-02": { s: "The pipeline shall stop with a stated reason if any of those four is missing or unusable." },
+  "SYS-03": { s: "The pipeline shall run the test that shows the bug and record what failed and where." },
+  "SYS-04": { s: "The pipeline shall generate each test from the recorded facts for that bug." },
+  "SYS-05": { s: "The pipeline shall generate two kinds of tests: tests that catch the bug, and tests that check working behaviour." },
+  "SYS-06": { s: "The pipeline shall run each test on both the buggy code and the fixed code." },
+  "SYS-07": { s: "The pipeline shall stop any test that runs longer than its time limit." },
+  "SYS-08": { s: "The pipeline shall check that the test actually ran the broken part of the code." },
+  "SYS-09": { s: "The pipeline shall accept or reject each test using a written rule for its kind." },
+  "SYS-10": { s: "The pipeline shall feed the reason for rejection into the next try." },
+  "SYS-11": { s: "The pipeline shall stop after a set number of tries per bug." },
+  "SYS-12": { s: "The pipeline shall record what happened on every try." },
+  "SYS-13": { s: "The pipeline shall save, with each accepted test, the settings and evidence used to make it." },
 };
 
 const GROUPS = [
@@ -233,10 +188,6 @@ document.getElementById("sysCol").innerHTML = PHASES.map(([name, ids]) => `
       return `<button class="card" data-side="sys" data-id="${id}" aria-pressed="false">
         <span class="card-top"><span class="rid">${id}</span><span class="kids">${k} module${k === 1 ? "" : "s"}</span></span>
         <p class="statement">${esc(r.s)}</p>
-        <dl class="detail" hidden>
-          <div class="detail-row"><dt>Why</dt><dd>${esc(r.why)}</dd></div>
-          <div class="detail-row"><dt>Check</dt><dd>${esc(r.check)}</dd></div>
-        </dl>
       </button>`;
     }).join("")}</div>
   </div>`).join("");
@@ -275,8 +226,6 @@ function apply() {
     c.classList.toggle("chosen", chosen && !hide);
     c.setAttribute("aria-pressed", String(chosen));
 
-    const detail = c.querySelector(".detail");
-    if (detail) detail.hidden = !chosen;
     const srcLine = c.querySelector(".parent-tag");
     if (srcLine) srcLine.hidden = !chosen;
   });
