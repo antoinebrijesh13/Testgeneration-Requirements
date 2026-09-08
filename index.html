@@ -142,7 +142,7 @@ const GROUPS = [
     ["GEN-01", "SYS-04", "The generation module shall put the recorded facts and the guidance into the prompt for every test.", "positive_test_generation.py / negative_test_generation.py"],
     ["GEN-02", "SYS-05", "The generation module shall produce a test name, test code and a reason for each candidate.", "positive_ / negative_test_generation.py: validate_*_test_object"],
     ["GEN-03", "SYS-05", "The generation module shall reject a candidate with an empty name, code or reason.", "positive_ / negative_test_generation.py: validate_*_test_object"],
-    ["GEN-04", "SYS-05", "The generation module shall use a separate path for bug-catching tests and behaviour tests.", "negative_test_generation.py / positive_test_generation.py"]
+    ["GEN-04", "SYS-05", "The generation module shall generate for the kind requested, using that kind's prompt and rules.", "negative_test_generation.py / positive_test_generation.py"]
   ]],
   ["Running", [
     ["RUN-01", "SYS-06", "The validation module shall run each candidate on the buggy checkout and save the result.", "validate_tests.py: run_pytest_with_coverage"],
