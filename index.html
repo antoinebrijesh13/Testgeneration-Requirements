@@ -47,7 +47,7 @@ dt:target, li:target { background-color: #eef2a5; }
 
 <h2>Scope</h2>
 <p>The system generates tests that catch the bug and tests that guard the behaviour that already worked.</p>
-<p>It does not generate patches, judge whether a patch is correct, or choose which bugs to work on. A user takes the accepted tests and runs them with a separate patch generation tool.</p>
+<p>It does not generate patches, judge whether a patch is correct, or choose which bugs to work on. A user takes the valid tests and runs them with a separate repair tool.</p>
 
 <h2>Definitions</h2>
 <ul>
@@ -60,6 +60,7 @@ dt:target, li:target { background-color: #eef2a5; }
 <li id="def-negative-test"><b>negative test</b> &mdash; a test that fails on the buggy version and passes on the fixed version.</li>
 <li id="def-positive-test"><b>positive test</b> &mdash; a test that passes on both versions.</li>
 <li id="def-candidate"><b>candidate</b> &mdash; a test that has been written but not yet accepted or rejected.</li>
+<li id="def-valid-test"><b>valid test</b> &mdash; a candidate that met every check and was kept.</li>
 <li id="def-coverage"><b>coverage</b> &mdash; a record of which lines ran while a test was running.</li>
 <li id="def-environment"><b>environment</b> &mdash; the Python installation a project&#x27;s tests run under.</li>
 <li id="def-repair-tool"><b>repair tool (PyTER)</b> &mdash; a separate program that fixes the buggy code using the generated positive and negative tests.</li>
@@ -70,7 +71,7 @@ dt:target, li:target { background-color: #eef2a5; }
 <li><b>a language model</b> &mdash; writes each candidate test when the system asks for one</li>
 <li><b>a bug benchmark</b> &mdash; supplies each bug: both versions of the code and a test that already fails</li>
 <li><b>the project&#x27;s environment</b> &mdash; the Python installation the tests run under; it must have pytest and coverage</li>
-<li><b>a user</b> &mdash; selects the bug to work on, then takes the accepted tests to the repair tool</li>
+<li><b>a user</b> &mdash; selects the bug to work on, then takes the valid tests to the repair tool</li>
 </ul>
 
 <h2>System Requirements</h2>
@@ -118,10 +119,10 @@ dt:target, li:target { background-color: #eef2a5; }
 <dd>The system shall record the outcome of every <a href="#def-candidate">candidate</a>.</dd>
 <dd class="note">Met by <a href="#out-01">OUT-01</a>, <a href="#out-02">OUT-02</a>, <a href="#out-03">OUT-03</a></dd>
 <dt id="sys-15">SYS-15</dt>
-<dd>The system shall save each accepted test as a file that runs on its own.</dd>
+<dd>The system shall save each <a href="#def-valid-test">valid test</a> as a file that runs on its own.</dd>
 <dd class="note">Met by <a href="#out-04">OUT-04</a></dd>
 <dt id="sys-16">SYS-16</dt>
-<dd>The system shall save, with each accepted test, the settings and <a href="#def-evidence">evidence</a> it came from.</dd>
+<dd>The system shall save, with each <a href="#def-valid-test">valid test</a>, the settings and <a href="#def-evidence">evidence</a> it came from.</dd>
 <dd class="note">Met by <a href="#out-05">OUT-05</a></dd>
 </dl>
 
@@ -261,7 +262,7 @@ dt:target, li:target { background-color: #eef2a5; }
 <dd>The reporting module shall save why the run stopped.</dd>
 <dd class="note">Serves <a href="#sys-14">SYS-14</a> &middot; <code>iterative_generation.py: persist_outputs, stop_reason</code></dd>
 <dt id="out-04">OUT-04</dt>
-<dd>The reporting module shall save each accepted test as a file next to its validation result.</dd>
+<dd>The reporting module shall save each valid test as a file next to its validation result.</dd>
 <dd class="note">Serves <a href="#sys-15">SYS-15</a> &middot; <code>iterative_generation.py: persist_outputs</code></dd>
 <dt id="out-05">OUT-05</dt>
 <dd>The reporting module shall save the model, settings and bug the test came from.</dd>
