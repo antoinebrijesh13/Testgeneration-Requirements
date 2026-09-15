@@ -44,7 +44,7 @@ hr { border: 0; border-top: 1px solid #e5e5e5; margin: 2.5em 0 0; }
 <p>Together they give a repair tool enough to build a patch: the first kind proves the bug is gone, the second proves nothing else broke.</p>
 
 <h2>Scope</h2>
-<p>The system covers everything from a bug to a set of validated tests. It finds the buggy and fixed versions of the code, runs the test that already fails and records what broke and where, collects the failing test&#x27;s own code and the chain of calls from it to the broken method, and generates candidate tests of both kinds.</p>
+<p>The system generates tests that catch the bug and tests that guard the behaviour that already worked.</p>
 <p>It does not generate patches, judge whether a patch is correct, or choose which bugs to work on. A user takes the accepted tests and runs them with a separate patch generation tool.</p>
 
 <h2>System Requirements</h2>
