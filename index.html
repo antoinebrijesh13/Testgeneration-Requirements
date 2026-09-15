@@ -30,6 +30,8 @@ dl { margin: 1em 0; }
 dt { font-weight: bold; margin-top: 1em; }
 dd { margin: .25em 0 0; }
 dd.note { color: #666; font-size: .9em; text-align: left; }
+ul { margin: 1em 0; }
+ul li { margin: .45em 0 .45em 1.55em; text-align: left; }
 .meta { color: #666; font-size: .9em; }
 hr { border: 0; border-top: 1px solid #e5e5e5; margin: 2.5em 0 0; }
 .footnote { color: #666; font-size: .9em; text-align: left; margin-top: 1em; }
@@ -46,6 +48,21 @@ hr { border: 0; border-top: 1px solid #e5e5e5; margin: 2.5em 0 0; }
 <h2>Scope</h2>
 <p>The system generates tests that catch the bug and tests that guard the behaviour that already worked.</p>
 <p>It does not generate patches, judge whether a patch is correct, or choose which bugs to work on. A user takes the accepted tests and runs them with a separate patch generation tool.</p>
+
+<h2>Definitions</h2>
+<ul>
+<li><b>bug</b> &mdash; a defect that already has a fix.</li>
+<li><b>buggy version</b> &mdash; the code before the fix.</li>
+<li><b>fixed version</b> &mdash; the code after the fix.</li>
+<li><b>failing test</b> &mdash; the test that already exists and fails on the buggy version.</li>
+<li><b>broken code</b> &mdash; the file, line and method where the failure happened.</li>
+<li><b>negative test</b> &mdash; a test that fails on the buggy version and passes on the fixed version.</li>
+<li><b>positive test</b> &mdash; a test that passes on both versions.</li>
+<li><b>candidate</b> &mdash; a test that has been written but not yet accepted or rejected.</li>
+<li><b>coverage</b> &mdash; a record of which lines ran while a test was running.</li>
+<li><b>environment</b> &mdash; the Python installation a project&#x27;s tests run under.</li>
+<li><b>repair tool (PyTER)</b> &mdash; a separate program that fixes the buggy code using the generated positive and negative tests.</li>
+</ul>
 
 <h2>System Requirements</h2>
 <h3>Set up</h3>
