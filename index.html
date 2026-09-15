@@ -42,12 +42,12 @@ dt:target, li:target { background-color: #eef2a5; }
 
 <h2>Goal</h2>
 <p>Automated program repair runs on tests. Most bug fixes ship with one, or none at all.</p>
-<p>This system takes a bug and writes two kinds of tests for it: tests that catch the bug, and tests that guard the behaviour that already worked.</p>
-<p>Together they give a repair tool enough to build a patch: the first kind proves the bug is gone, the second proves nothing else broke.</p>
+<p>This system takes a <a href="#def-bug">bug</a> and writes two kinds of tests for it: tests that catch the bug, and tests that guard the behaviour that already worked.</p>
+<p>Together they give a <a href="#def-repair-tool">repair tool</a> enough to build a patch: the first kind proves the bug is gone, the second proves nothing else broke.</p>
 
 <h2>Scope</h2>
-<p>The system generates tests that catch the bug and tests that guard the behaviour that already worked.</p>
-<p>It does not generate patches, judge whether a patch is correct, or choose which bugs to work on. A user takes the valid tests and runs them with a separate repair tool.</p>
+<p>The system generates tests that catch the <a href="#def-bug">bug</a> and tests that guard the behaviour that already worked.</p>
+<p>It does not generate patches, judge whether a patch is correct, or choose which bugs to work on. A user takes the <a href="#def-valid-test">valid tests</a> and runs them with a separate <a href="#def-repair-tool">repair tool</a>.</p>
 
 <h2>Definitions</h2>
 <ul>
@@ -68,10 +68,10 @@ dt:target, li:target { background-color: #eef2a5; }
 
 <h2>Dependencies</h2>
 <ul>
-<li><b>a language model</b> &mdash; writes each candidate test when the system asks for one</li>
-<li><b>a bug benchmark</b> &mdash; supplies each bug: both versions of the code and a test that already fails</li>
+<li><b>a language model</b> &mdash; writes each <a href="#def-candidate-test">candidate test</a> when the system asks for one</li>
+<li><b>a bug benchmark</b> &mdash; supplies each <a href="#def-bug">bug</a>: both versions of the code and a test that already fails</li>
 <li><b>the project&#x27;s environment</b> &mdash; the Python installation the tests run under; it must have pytest and coverage</li>
-<li><b>a user</b> &mdash; selects the bug to work on, then takes the valid tests to the repair tool</li>
+<li><b>a user</b> &mdash; selects the <a href="#def-bug">bug</a> to work on, then takes the <a href="#def-valid-test">valid tests</a> to the <a href="#def-repair-tool">repair tool</a></li>
 </ul>
 
 <h2>System Requirements</h2>
