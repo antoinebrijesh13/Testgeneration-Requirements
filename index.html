@@ -74,7 +74,6 @@ dt:target, li:target { background-color: #eef2a5; }
 </ul>
 
 <h2>System Requirements</h2>
-<h3>Inputs and evidence</h3>
 <dl>
 <dt id="sys-01">SYS-01</dt>
 <dd>The system shall identify the <a href="#def-buggy-version">buggy version</a>, the <a href="#def-fixed-version">fixed version</a>, the <a href="#def-failing-test">failing test</a> and the <a href="#def-environment">environment</a> for a <a href="#def-bug">bug</a>.</dd>
@@ -85,9 +84,6 @@ dt:target, li:target { background-color: #eef2a5; }
 <dt id="sys-03">SYS-03</dt>
 <dd>The system shall record the <a href="#def-evidence">evidence</a> for a <a href="#def-bug">bug</a>.</dd>
 <dd class="note">Met by <a href="#evd-01">EVD-01</a>, <a href="#evd-02">EVD-02</a>, <a href="#evd-03">EVD-03</a>, <a href="#evd-04">EVD-04</a></dd>
-</dl>
-<h3>Test generation</h3>
-<dl>
 <dt id="sys-04">SYS-04</dt>
 <dd>The system shall write every <a href="#def-candidate">candidate</a> from that <a href="#def-evidence">evidence</a>.</dd>
 <dd class="note">Met by <a href="#ben-01">BEN-01</a>, <a href="#ben-02">BEN-02</a>, <a href="#ben-03">BEN-03</a>, <a href="#gde-01">GDE-01</a>, <a href="#gde-02">GDE-02</a>, <a href="#gen-01">GEN-01</a></dd>
@@ -97,9 +93,6 @@ dt:target, li:target { background-color: #eef2a5; }
 <dt id="sys-06">SYS-06</dt>
 <dd>The system shall use the reason a <a href="#def-candidate">candidate</a> was rejected when writing later ones.</dd>
 <dd class="note">Met by <a href="#lop-01">LOP-01</a></dd>
-</dl>
-<h3>Acceptance</h3>
-<dl>
 <dt id="sys-07">SYS-07</dt>
 <dd>The system shall run every <a href="#def-candidate">candidate</a> on the <a href="#def-buggy-version">buggy version</a> and on the <a href="#def-fixed-version">fixed version</a>.</dd>
 <dd class="note">Met by <a href="#run-01">RUN-01</a>, <a href="#run-02">RUN-02</a></dd>
@@ -115,18 +108,12 @@ dt:target, li:target { background-color: #eef2a5; }
 <dt id="sys-11">SYS-11</dt>
 <dd>The system shall record the reason a <a href="#def-candidate">candidate</a> was rejected.</dd>
 <dd class="note">Met by <a href="#acc-05">ACC-05</a></dd>
-</dl>
-<h3>Limits</h3>
-<dl>
 <dt id="sys-12">SYS-12</dt>
 <dd>The system shall limit how long a single <a href="#def-candidate">candidate</a> may run.</dd>
 <dd class="note">Met by <a href="#run-03">RUN-03</a></dd>
 <dt id="sys-13">SYS-13</dt>
 <dd>The system shall limit how many <a href="#def-candidate">candidates</a> it writes for one <a href="#def-bug">bug</a>.</dd>
 <dd class="note">Met by <a href="#lop-02">LOP-02</a>, <a href="#lop-03">LOP-03</a>, <a href="#lop-04">LOP-04</a></dd>
-</dl>
-<h3>Records</h3>
-<dl>
 <dt id="sys-14">SYS-14</dt>
 <dd>The system shall record the outcome of every <a href="#def-candidate">candidate</a>.</dd>
 <dd class="note">Met by <a href="#out-01">OUT-01</a>, <a href="#out-02">OUT-02</a>, <a href="#out-03">OUT-03</a></dd>
