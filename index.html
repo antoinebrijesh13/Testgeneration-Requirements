@@ -64,6 +64,14 @@ hr { border: 0; border-top: 1px solid #e5e5e5; margin: 2.5em 0 0; }
 <li><b>repair tool (PyTER)</b> &mdash; a separate program that fixes the buggy code using the generated positive and negative tests.</li>
 </ul>
 
+<h2>Dependencies</h2>
+<ul>
+<li><b>a language model</b> &mdash; writes each candidate test when the system asks for one</li>
+<li><b>a bug benchmark</b> &mdash; supplies each bug: both versions of the code and a test that already fails</li>
+<li><b>the project&#x27;s environment</b> &mdash; the Python installation the tests run under; it must have pytest and coverage</li>
+<li><b>a user</b> &mdash; selects the bug to work on, then takes the accepted tests to the repair tool</li>
+</ul>
+
 <h2>System Requirements</h2>
 <h3>Set up</h3>
 <dl>
