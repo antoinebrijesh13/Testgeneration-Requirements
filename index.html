@@ -59,8 +59,8 @@ dt:target, li:target { background-color: #eef2a5; }
 <li id="def-evidence"><b>evidence</b> &mdash; what the system recorded about a bug: the broken code and the error the failing test reported.</li>
 <li id="def-negative-test"><b>negative test</b> &mdash; a test that fails on the buggy version and passes on the fixed version.</li>
 <li id="def-positive-test"><b>positive test</b> &mdash; a test that passes on both versions.</li>
-<li id="def-candidate"><b>candidate</b> &mdash; a test that has been written but not yet accepted or rejected.</li>
-<li id="def-valid-test"><b>valid test</b> &mdash; a candidate that met every check and was kept.</li>
+<li id="def-candidate-test"><b>candidate test</b> &mdash; a test that has been written but not yet accepted or rejected.</li>
+<li id="def-valid-test"><b>valid test</b> &mdash; a candidate test that met every check and was kept.</li>
 <li id="def-coverage"><b>coverage</b> &mdash; a record of which lines ran while a test was running.</li>
 <li id="def-environment"><b>environment</b> &mdash; the Python installation a project&#x27;s tests run under.</li>
 <li id="def-repair-tool"><b>repair tool (PyTER)</b> &mdash; a separate program that fixes the buggy code using the generated positive and negative tests.</li>
@@ -86,37 +86,37 @@ dt:target, li:target { background-color: #eef2a5; }
 <dd>The system shall record the <a href="#def-evidence">evidence</a> for a <a href="#def-bug">bug</a>.</dd>
 <dd class="note">Met by <a href="#evd-01">EVD-01</a>, <a href="#evd-02">EVD-02</a>, <a href="#evd-03">EVD-03</a>, <a href="#evd-04">EVD-04</a></dd>
 <dt id="sys-04">SYS-04</dt>
-<dd>The system shall write every <a href="#def-candidate">candidate</a> from that <a href="#def-evidence">evidence</a>.</dd>
+<dd>The system shall write every <a href="#def-candidate-test">candidate test</a> from that <a href="#def-evidence">evidence</a>.</dd>
 <dd class="note">Met by <a href="#ben-01">BEN-01</a>, <a href="#ben-02">BEN-02</a>, <a href="#ben-03">BEN-03</a>, <a href="#gde-01">GDE-01</a>, <a href="#gde-02">GDE-02</a>, <a href="#gen-01">GEN-01</a></dd>
 <dt id="sys-05">SYS-05</dt>
 <dd>The system shall write both <a href="#def-negative-test">negative tests</a> and <a href="#def-positive-test">positive tests</a>.</dd>
 <dd class="note">Met by <a href="#gde-03">GDE-03</a>, <a href="#gen-02">GEN-02</a>, <a href="#gen-03">GEN-03</a>, <a href="#gen-04">GEN-04</a></dd>
 <dt id="sys-06">SYS-06</dt>
-<dd>The system shall give the reason why an earlier <a href="#def-candidate">candidate</a> was rejected when asking for another <a href="#def-candidate">candidate</a> for the same <a href="#def-bug">bug</a>.</dd>
+<dd>The system shall give the reason why an earlier <a href="#def-candidate-test">candidate test</a> was rejected when asking for another <a href="#def-candidate-test">candidate test</a> for the same <a href="#def-bug">bug</a>.</dd>
 <dd class="note">Met by <a href="#lop-01">LOP-01</a></dd>
 <dt id="sys-07">SYS-07</dt>
-<dd>The system shall run every <a href="#def-candidate">candidate</a> on the <a href="#def-buggy-version">buggy version</a> and on the <a href="#def-fixed-version">fixed version</a>.</dd>
+<dd>The system shall run every <a href="#def-candidate-test">candidate test</a> on the <a href="#def-buggy-version">buggy version</a> and on the <a href="#def-fixed-version">fixed version</a>.</dd>
 <dd class="note">Met by <a href="#run-01">RUN-01</a>, <a href="#run-02">RUN-02</a></dd>
 <dt id="sys-08">SYS-08</dt>
-<dd>The system shall use <a href="#def-coverage">coverage</a> to check whether a <a href="#def-candidate">candidate</a> reached the <a href="#def-broken-code">broken code</a>.</dd>
+<dd>The system shall use <a href="#def-coverage">coverage</a> to check whether a <a href="#def-candidate-test">candidate test</a> reached the <a href="#def-broken-code">broken code</a>.</dd>
 <dd class="note">Met by <a href="#rel-01">REL-01</a>, <a href="#rel-02">REL-02</a>, <a href="#rel-03">REL-03</a></dd>
 <dt id="sys-09">SYS-09</dt>
-<dd>The system shall accept a <a href="#def-candidate">candidate</a> only if it behaves as a <a href="#def-negative-test">negative test</a> or a <a href="#def-positive-test">positive test</a>.</dd>
+<dd>The system shall accept a <a href="#def-candidate-test">candidate test</a> only if it behaves as a <a href="#def-negative-test">negative test</a> or a <a href="#def-positive-test">positive test</a>.</dd>
 <dd class="note">Met by <a href="#acc-01">ACC-01</a>, <a href="#acc-03">ACC-03</a>, <a href="#acc-04">ACC-04</a></dd>
 <dt id="sys-10">SYS-10</dt>
 <dd>The system shall accept a <a href="#def-negative-test">negative test</a> only if it fails with the error recorded in the <a href="#def-evidence">evidence</a>.</dd>
 <dd class="note">Met by <a href="#acc-02">ACC-02</a></dd>
 <dt id="sys-11">SYS-11</dt>
-<dd>The system shall record the reason a <a href="#def-candidate">candidate</a> was rejected.</dd>
+<dd>The system shall record the reason a <a href="#def-candidate-test">candidate test</a> was rejected.</dd>
 <dd class="note">Met by <a href="#acc-05">ACC-05</a></dd>
 <dt id="sys-12">SYS-12</dt>
-<dd>The system shall limit how long a single <a href="#def-candidate">candidate</a> may run.</dd>
+<dd>The system shall limit how long a single <a href="#def-candidate-test">candidate test</a> may run.</dd>
 <dd class="note">Met by <a href="#run-03">RUN-03</a></dd>
 <dt id="sys-13">SYS-13</dt>
-<dd>The system shall limit how many <a href="#def-candidate">candidates</a> it writes for one <a href="#def-bug">bug</a>.</dd>
+<dd>The system shall limit how many <a href="#def-candidate-test">candidate tests</a> it writes for one <a href="#def-bug">bug</a>.</dd>
 <dd class="note">Met by <a href="#lop-02">LOP-02</a>, <a href="#lop-03">LOP-03</a>, <a href="#lop-04">LOP-04</a></dd>
 <dt id="sys-14">SYS-14</dt>
-<dd>The system shall record the outcome of every <a href="#def-candidate">candidate</a>.</dd>
+<dd>The system shall record the outcome of every <a href="#def-candidate-test">candidate test</a>.</dd>
 <dd class="note">Met by <a href="#out-01">OUT-01</a>, <a href="#out-02">OUT-02</a>, <a href="#out-03">OUT-03</a></dd>
 <dt id="sys-15">SYS-15</dt>
 <dd>The system shall save each <a href="#def-valid-test">valid test</a> as a file that runs on its own.</dd>
@@ -184,10 +184,10 @@ dt:target, li:target { background-color: #eef2a5; }
 <dd>The generation module shall put the recorded facts and the guidance into the prompt for every test.</dd>
 <dd class="note">Serves <a href="#sys-04">SYS-04</a> &middot; <code>positive_ / negative_test_generation.py</code></dd>
 <dt id="gen-02">GEN-02</dt>
-<dd>The generation module shall produce a test name, test code and a reason for each candidate.</dd>
+<dd>The generation module shall produce a test name, test code and a reason for each candidate test.</dd>
 <dd class="note">Serves <a href="#sys-05">SYS-05</a> &middot; <code>validate_*_test_object</code></dd>
 <dt id="gen-03">GEN-03</dt>
-<dd>The generation module shall reject a candidate with an empty name, code or reason.</dd>
+<dd>The generation module shall reject a candidate test with an empty name, code or reason.</dd>
 <dd class="note">Serves <a href="#sys-05">SYS-05</a> &middot; <code>validate_*_test_object</code></dd>
 <dt id="gen-04">GEN-04</dt>
 <dd>The generation module shall generate for the kind requested, using that kind&#x27;s prompt and rules.</dd>
@@ -196,10 +196,10 @@ dt:target, li:target { background-color: #eef2a5; }
 <h3>Running</h3>
 <dl>
 <dt id="run-01">RUN-01</dt>
-<dd>The validation module shall run each candidate on the buggy checkout and save the result.</dd>
+<dd>The validation module shall run each candidate test on the buggy checkout and save the result.</dd>
 <dd class="note">Serves <a href="#sys-07">SYS-07</a> &middot; <code>validate_tests.py: run_pytest_with_coverage</code></dd>
 <dt id="run-02">RUN-02</dt>
-<dd>The validation module shall run each candidate on the fixed checkout and save the result.</dd>
+<dd>The validation module shall run each candidate test on the fixed checkout and save the result.</dd>
 <dd class="note">Serves <a href="#sys-07">SYS-07</a> &middot; <code>validate_tests.py: run_pytest_with_coverage</code></dd>
 <dt id="run-03">RUN-03</dt>
 <dd>The validation module shall kill a test that passes its time limit and mark it a timeout.</dd>
