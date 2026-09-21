@@ -112,13 +112,6 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <li><strong>Language model:</strong> produces <a href="#def-candidate-test">candidate tests</a> from the supplied bug evidence.</li>
 <li><strong>Repair tool:</strong> accepts the buggy code and <a href="#def-valid-test">valid tests</a> and returns <a href="#def-candidate-patch">candidate patches</a> or an execution outcome.</li>
 </ul>
-<h2 id="proposed-operating-rules">Proposed operating rules</h2>
-<ul>
-<li>Repair requires at least one valid <a href="#def-positive-test">positive test</a> and one valid <a href="#def-negative-test">negative test</a> for the selected bug. If either type is unavailable, repair does not start and the missing type is reported.</li>
-<li><a href="#def-positive-test">Positive tests</a> must exercise the <a href="#def-target-function">target function or method</a>. <a href="#def-negative-test">Negative tests</a> must reach the <a href="#def-broken-code">fault location</a> and reproduce the recorded failure.</li>
-<li>The run settings specify valid-test targets, generation-attempt limits, test-execution time limits, and the repair-tool time limit. No fixed numeric defaults are prescribed here.</li>
-</ul>
-<p>These rules define the proposed workflow, including how incomplete runs are handled.</p>
 <h2 id="definitions">Definitions</h2>
 <div class="table-scroll" role="region" aria-label="Requirements reference table" tabindex="0"><table>
 <thead>
