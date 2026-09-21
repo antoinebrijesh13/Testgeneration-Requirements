@@ -86,23 +86,24 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <nav aria-label="Page sections"><ul>
 <li><a href="#scope">Scope</a></li><li><a href="#functions-at-a-glance">Functions</a></li>
 <li><a href="#definitions">Definitions</a></li><li><a href="#fr-01">Detailed requirements</a></li>
-<li><a href="#manual-evaluation">Manual evaluation</a></li></ul></nav>
+<li><a href="#fr-05">FR-05: manual evaluation</a></li></ul></nav>
 <h2 id="goal">Goal</h2>
 <p>The system generates tests for a selected bug and supplies the <a href="#def-valid-test">valid tests</a> to a <a href="#def-repair-tool">repair tool</a> to generate <a href="#def-candidate-patch">candidate patches</a>. <a href="#def-negative-test">Negative tests</a> expose the observed bug. <a href="#def-positive-test">Positive tests</a> check behaviour that already works and should continue to work after repair.</p>
 <h2 id="scope">Scope</h2>
 <p>The automated workflow has four functions: identify and prepare the bug, generate <a href="#def-candidate-test">candidate tests</a>, validate those tests, and invoke the <a href="#def-repair-tool">repair tool</a> and save its patches.</p>
 <p>After receiving the patches, the user manually runs the <a href="#def-developer-test-suite">developer test suite</a> against each <a href="#def-patched-version">patched version</a> and checks whether all tests pass or any test fails. This evaluation is outside the automated system boundary.</p>
 <h2 id="reading-the-requirements">Reading the requirements</h2>
-<p>These are <strong>system-level functional requirements</strong>: “system-level” identifies the scope, and “functional” means they describe what the system must do. <a href="#fr-01">FR-01</a> to <a href="#fr-04">FR-04</a> describe the four main functions. Numbered requirements underneath each function specify its detailed behaviour.</p>
+<p><a href="#fr-01">FR-01</a> to <a href="#fr-04">FR-04</a> are <strong>system-level functional requirements</strong>: “system-level” identifies the scope, and “functional” means they describe what the system must do. <a href="#fr-05">FR-05</a> describes the user's manual patch evaluation. Together, they specify five workflow activities, with the responsible actor stated explicitly. Numbered requirements underneath each activity specify its detailed behaviour.</p>
 <p><strong>Shall</strong> marks a required behaviour. Definitions and acceptance rules are part of this specification. Verification examples show how a requirement can be checked; they are not completed test results. This specification describes required behaviour and does not claim that every requirement is already implemented.</p>
 <h2 id="functions-at-a-glance">Functions at a glance</h2>
 <ol>
 <li><a href="#fr-01">FR-01 — Identify and prepare the bug</a>.</li>
 <li><a href="#fr-02">FR-02 — Generate positive and negative candidate tests</a>.</li>
 <li><a href="#fr-03">FR-03 — Validate generated candidate tests</a>.</li>
-<li><a href="#fr-04">FR-04 — Invoke the repair tool and collect patches</a>.</li>
+<li><a href="#fr-04">FR-04 — Generate candidate patches using validated tests</a>.</li>
+<li><a href="#fr-05">FR-05 — Evaluate candidate patches using developer tests</a> — performed manually by the user.</li>
 </ol>
-<p>The subsequent <a href="#manual-evaluation">manual patch evaluation</a> is performed by the user.</p>
+<p><a href="#fr-04">FR-04</a> obtains <a href="#def-candidate-patch">candidate patches</a> from the <a href="#def-repair-tool">repair tool</a>. <a href="#fr-05">FR-05</a> evaluates those patches using the <a href="#def-developer-test-suite">developer test suite</a>.</p>
 <h2 id="dependencies-and-inputs">Dependencies and inputs</h2>
 <ul>
 <li><strong>User:</strong> selects the project, bug, and variant where applicable, and supplies run settings.</li>
@@ -307,7 +308,7 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 </tbody>
 </table></div>
 <p><strong>Verification example:</strong> Supply a relevant PASS/PASS positive, a matching FAIL/PASS negative, an unrelated FAIL/PASS candidate, a skipped test, and a test with a missing dependency. Only the first two may be accepted. A positive candidate with FAIL/PASS results is rejected as a positive; it is not silently relabelled.</p>
-<h2 id="fr-04">FR-04 — Invoke the repair tool and collect patches</h2>
+<h2 id="fr-04">FR-04 — Generate candidate patches using validated tests</h2>
 <p><strong>The system shall invoke the selected repair tool on the buggy version using the validated positive and negative tests and collect the candidate patches returned by the tool.</strong></p>
 <ul>
 <li id="fr-04-01"><strong>FR-04.01:</strong> The system shall accept the repair-tool identifier, invocation settings, and execution time limit for the repair run.</li>
@@ -321,18 +322,20 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <li id="fr-04-09"><strong>FR-04.09:</strong> The system shall produce a run report identifying generated-test counts, repair status, returned patch identifiers and locations, and incomplete stages.</li>
 </ul>
 <p><strong>Verification example:</strong> Use a repair-tool stub that captures its inputs and returns two patches. Confirm that it receives only accepted generated tests from the selected bug and that both patches are saved with their identifiers and locations in the run report. Repeat with no valid <a href="#def-negative-test">negative tests</a> and verify that the tool is not invoked.</p>
-<h2 id="manual-evaluation">Manual evaluation — Run developer tests on candidate patches</h2>
-<p>This is a procedure performed by the user after receiving the <a href="#def-repair-tool">repair tool</a>’s output.</p>
-<p><strong>After obtaining a candidate patch, the user runs the developer test suite against the patched version and checks whether all tests pass or at least one test fails.</strong></p>
-<ol>
-<li>Apply the <a href="#def-candidate-patch">candidate patch</a> to a fresh copy of the corresponding <a href="#def-buggy-version">buggy version</a>, unless the <a href="#def-repair-tool">repair tool</a> already supplies that <a href="#def-patched-version">patched version</a>. Evaluate each patch separately.</li>
-<li>Run the <a href="#def-developer-test-suite">developer test suite</a> against the <a href="#def-patched-version">patched version</a> using the project's test <a href="#def-environment">environment</a>.</li>
-<li>Check the test-runner results: the patch passes this evaluation if all tests pass; it fails this evaluation if any test fails.</li>
-</ol>
-<p>If execution cannot complete, or tests do not execute, an all-tests-pass result has not been established. Passing the suite demonstrates that the patch satisfies those tests; it does not prove correctness for untested behaviour.</p>
+<h2 id="fr-05"><span class="legacy-anchor" id="manual-evaluation" aria-hidden="true"></span>FR-05 — Evaluate candidate patches using developer tests</h2>
+<p><strong>Performed manually by the user after FR-04.</strong> This requirement describes the evaluation activity in the overall workflow; it does not require the system to automate patch evaluation.</p>
+<p><strong>The user shall evaluate each candidate patch by running the developer test suite against the patched version and recording whether all tests pass or any test fails.</strong></p>
+<ul>
+<li id="fr-05-01"><strong>FR-05.01:</strong> The user shall evaluate each <a href="#def-candidate-patch">candidate patch</a> separately on a copy of the corresponding <a href="#def-buggy-version">buggy version</a> with that patch applied; a <a href="#def-patched-version">patched version</a> supplied by the <a href="#def-repair-tool">repair tool</a> may be used directly.</li>
+<li id="fr-05-02"><strong>FR-05.02:</strong> The user shall run the <a href="#def-developer-test-suite">developer test suite</a> against the <a href="#def-patched-version">patched version</a> using the project's test <a href="#def-environment">environment</a>.</li>
+<li id="fr-05-03"><strong>FR-05.03:</strong> The user shall record the patch as passing this evaluation if all tests pass, or failing this evaluation if any test fails, and associate the result with the evaluated patch.</li>
+<li id="fr-05-04"><strong>FR-05.04:</strong> If no test failure is observed but execution cannot complete or tests do not execute, the user shall record the evaluation as incomplete rather than passing.</li>
+</ul>
+<p>Passing the suite demonstrates that the patch satisfies those tests; it does not prove correctness for untested behaviour.</p>
+<p><strong>Verification example:</strong> Manually run the <a href="#def-developer-test-suite">developer test suite</a> on two <a href="#def-candidate-patch">candidate patches</a>. Record a passing result for a patch on which all tests pass and a failing result for a patch on which at least one test fails.</p>
 
 <hr>
-<p class="footnote">Four system-level functional requirements, expanded into 37 detailed requirements. Developer-test evaluation of candidate patches is performed manually. Previous requirement links lead to the corresponding section in this revision.</p>
+<p class="footnote">Five workflow requirements, expanded into 41 detailed requirements. FR-01 to FR-04 describe automated system functions. FR-05 describes manual patch evaluation by the user. Previous requirement links lead to the corresponding section in this revision.</p>
 </main>
 </body>
 </html>
