@@ -268,7 +268,6 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <summary>Details</summary>
 <div class="requirement-details">
 <ul>
-<li id="fr-05-01"><strong>FR-05.01:</strong> The user shall evaluate each candidate patch separately on a copy of the corresponding <a href="#def-buggy-version">buggy version</a> with that patch applied; a patched version supplied by the <a href="#def-repair-tool">repair tool</a> may be used directly.</li>
 <li id="fr-05-02"><strong>FR-05.02:</strong> The user shall run the <a href="#def-developer-test-suite">developer test suite</a> against the patched version using the project's test <a href="#def-environment">environment</a>.</li>
 <li id="fr-05-03"><strong>FR-05.03:</strong> The user shall record the patch as passing this evaluation if all tests pass, or failing this evaluation if any test fails, and associate the result with the evaluated patch.</li>
 <li id="fr-05-04"><strong>FR-05.04:</strong> If no test failure is observed but execution cannot complete or tests do not execute, the user shall record the evaluation as incomplete rather than passing.</li>
@@ -387,7 +386,7 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <p>A zero process exit code alone does not establish PASS. Expected-failure markers do not turn an unverified result into PASS.</p>
 
 <hr>
-<p class="footnote">Five workflow requirements, expanded into 34 detailed requirements. FR-01 to FR-04 describe automated system functions. FR-05 describes manual patch evaluation by the user. Previous requirement links lead to the corresponding section in this revision.</p>
+<p class="footnote">Five workflow requirements, expanded into 33 detailed requirements. FR-01 to FR-04 describe automated system functions. FR-05 describes manual patch evaluation by the user. Previous requirement links lead to the corresponding section in this revision.</p>
 </main>
 <script>
 function revealLinkedRequirement() {
