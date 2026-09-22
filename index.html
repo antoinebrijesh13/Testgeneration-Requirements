@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Functional requirements for bug preparation, positive and negative test generation, test validation, and repair-tool invocation, followed by manual patch evaluation.">
+<meta name="description" content="Functional requirements for bug preparation, positive and negative test generation, test validation, and supplying validated tests to a repair tool, followed by manual patch evaluation.">
 <title>TestGeneration Pipeline Requirements</title>
 <style>
 * { margin: 0; padding: 0; }
@@ -190,27 +190,21 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <p><strong>Verification example:</strong> Supply a relevant PASS/PASS positive, a matching FAIL/PASS negative, an unrelated FAIL/PASS candidate, a skipped test, and a test with a missing dependency. Only the first two may be accepted. A positive candidate with FAIL/PASS results is rejected as a positive; it is not silently relabelled.</p>
 </div>
 </details>
-<h2 id="fr-04">FR-04 — Generate candidate patches using validated tests</h2>
-<p><strong>The system shall invoke the selected repair tool on the buggy version using the validated positive and negative tests and collect the candidate patches returned by the tool.</strong></p>
+<h2 id="fr-04">FR-04 — Supply validated tests to the repair tool</h2>
+<p><strong>The system shall supply the validated positive and negative tests for the selected bug to the repair tool for patch generation.</strong></p>
 <details class="subrequirements">
 <summary>Details</summary>
 <div class="requirement-details">
 <ul>
-<li id="fr-04-01"><strong>FR-04.01:</strong> The system shall accept the repair-tool identifier, invocation settings, and execution time limit for the repair run.</li>
-<li id="fr-04-02"><strong>FR-04.02:</strong> The system shall start repair only when at least one valid <a href="#def-positive-test">positive test</a> and one valid <a href="#def-negative-test">negative test</a> are available for the same bug instance and recorded versions.</li>
-<li id="fr-04-03"><strong>FR-04.03:</strong> If <a href="#fr-04-02">FR-04.02</a> is unmet, the system shall record that repair was not started and identify the missing test type.</li>
-<li id="fr-04-04"><strong>FR-04.04:</strong> The system shall supply a copy of the <a href="#def-buggy-version">buggy version</a> and the accepted positive and <a href="#def-negative-test">negative tests</a> to the <a href="#def-repair-tool">repair tool</a>, preserving their identities and executable behaviour during any required input-format conversion.</li>
-<li id="fr-04-05"><strong>FR-04.05:</strong> The system shall record the exact test set, <a href="#def-failing-test">original failing tests</a> if supplied, repair-tool version, settings, and source snapshot used for the invocation.</li>
-<li id="fr-04-06"><strong>FR-04.06:</strong> The system shall invoke the tool and record its completion status and output, distinguishing returned patches, completion without a patch, execution error, and timeout.</li>
-<li id="fr-04-07"><strong>FR-04.07:</strong> The system shall terminate a repair invocation that exceeds its configured time limit and retain any complete patches already returned.</li>
-<li id="fr-04-08"><strong>FR-04.08:</strong> The system shall save each returned candidate patch with an identifier linking it to the bug, repair invocation, and test inputs, and provide its saved location to the user for manual evaluation.</li>
-<li id="fr-04-09"><strong>FR-04.09:</strong> The system shall produce a run report identifying generated-test counts, repair status, returned patch identifiers and locations, and incomplete stages.</li>
+<li id="fr-04-01"><strong>FR-04.01:</strong> The system shall supply only tests accepted under <a href="#fr-03">FR-03</a>.</li>
+<li id="fr-04-02"><strong>FR-04.02:</strong> The system shall supply only tests associated with the selected bug.</li>
+<li id="fr-04-03"><strong>FR-04.03:</strong> The system shall identify each supplied test as positive or negative.</li>
 </ul>
-<p><strong>Verification example:</strong> Use a repair-tool stub that captures its inputs and returns two patches. Confirm that it receives only accepted generated tests from the selected bug and that both patches are saved with their identifiers and locations in the run report. Repeat with no valid <a href="#def-negative-test">negative tests</a> and verify that the tool is not invoked.</p>
+<p><strong>Verification example:</strong> Inspect the tests supplied to the <a href="#def-repair-tool">repair tool</a>. Confirm that they belong to the selected bug, passed validation, and are identified as positive or negative.</p>
 </div>
 </details>
 <h2 id="fr-05"><span class="legacy-anchor" id="manual-evaluation" aria-hidden="true"></span>FR-05 — Evaluate candidate patches using developer tests</h2>
-<p><strong>Performed manually by the user after FR-04.</strong> This requirement describes the evaluation activity in the overall workflow; it does not require the system to automate patch evaluation.</p>
+<p><strong>Performed manually by the user after obtaining patches from the repair tool.</strong> This requirement describes the evaluation activity in the overall workflow; it does not require the system to automate patch evaluation.</p>
 <p><strong>The user shall evaluate each candidate patch by running the developer test suite against the patched version and recording whether all tests pass or any test fails.</strong></p>
 <details class="subrequirements">
 <summary>Details</summary>
@@ -335,7 +329,7 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <p>A zero process exit code alone does not establish PASS. Expected-failure markers do not turn an unverified result into PASS.</p>
 
 <hr>
-<p class="footnote">Five workflow requirements, expanded into 41 detailed requirements. FR-01 to FR-04 describe automated system functions. FR-05 describes manual patch evaluation by the user. Previous requirement links lead to the corresponding section in this revision.</p>
+<p class="footnote">Five workflow requirements, expanded into 35 detailed requirements. FR-01 to FR-04 describe automated system functions. FR-05 describes manual patch evaluation by the user. Previous requirement links lead to the corresponding section in this revision.</p>
 </main>
 <script>
 function revealLinkedRequirement() {
