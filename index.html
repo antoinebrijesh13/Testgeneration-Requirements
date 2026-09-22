@@ -54,6 +54,12 @@ nav ul li { margin: 0; }
 ol { padding-left: 1.6em; }
 ol li { margin: .6em 0; }
 li[id^="fr-"] { margin-block: 1em; }
+.subrequirements { margin: 1em 0 1.8em; border: 1px solid #ddd; border-radius: 4px; }
+.subrequirements summary { padding: .75em 1em; cursor: pointer; font-weight: bold; background: #f6f6f6; }
+.subrequirements summary:hover { background: #eee; }
+.subrequirements summary:focus-visible { outline: 2px solid #00a; outline-offset: 3px; }
+.requirement-details { padding: 0 1em .5em; }
+.subrequirements[open] summary { border-bottom: 1px solid #ddd; }
 .table-scroll { overflow-x: auto; margin: 1.2em 0; }
 table { width: 100%; border-collapse: collapse; font-size: .95em; line-height: 1.5; }
 th, td { border: 1px solid #ddd; padding: .65em .8em; text-align: left; vertical-align: top; }
@@ -75,6 +81,9 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
   h2 { break-after: avoid; }
   tr { break-inside: avoid; }
   .table-scroll { overflow: visible; }
+  .subrequirements { border: 0; }
+  .subrequirements summary { display: none; }
+  .requirement-details { padding: 0; }
 }
 </style>
 </head>
@@ -92,6 +101,130 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <li><strong>Language model:</strong> produces <a href="#def-candidate-test">candidate tests</a> from the supplied bug evidence.</li>
 <li><strong>Repair tool:</strong> accepts the buggy code and <a href="#def-valid-test">valid tests</a> and returns candidate patches or an execution outcome.</li>
 </ul>
+<h2 id="fr-01"><span class="legacy-anchor" id="sys-01" aria-hidden="true"></span>FR-01 — Identify and prepare the bug</h2>
+<p><strong>The system shall identify and verify the buggy version, fixed version, original failing tests, and execution environment associated with the selected bug before generating tests.</strong></p>
+<details class="subrequirements">
+<summary>Sub-requirements and verification</summary>
+<div class="requirement-details">
+<ul>
+<li id="fr-01-01"><strong>FR-01.01:</strong> The system shall accept a project identifier, bug identifier, and, where required, variant identifier that together select one bug instance.</li>
+<li id="fr-01-02"><span class="legacy-anchor" id="ctx-01" aria-hidden="true"></span><strong>FR-01.02:</strong> The system shall record the locations and source revisions or content fingerprints of the selected buggy and fixed versions.</li>
+<li id="fr-01-03"><strong>FR-01.03:</strong> The system shall record the identifiers, source, and execution commands of the <a href="#def-failing-test">original failing tests</a> associated with that bug instance.</li>
+<li id="fr-01-04"><span class="legacy-anchor" id="ctx-02" aria-hidden="true"></span><strong>FR-01.04:</strong> The system shall record the <a href="#def-environment">environment</a> and execution configuration used for each version, including the interpreter and dependency versions.</li>
+<li id="fr-01-05"><span class="legacy-anchor" id="evd-01" aria-hidden="true"></span><strong>FR-01.05:</strong> The system shall execute each selected <a href="#def-failing-test">original failing test</a> on both versions and record the outcome of each execution.</li>
+<li id="fr-01-06"><strong>FR-01.06:</strong> The system shall permit test generation only when every selected <a href="#def-failing-test">original failing test</a> produces FAIL on the <a href="#def-buggy-version">buggy version</a> and PASS on the <a href="#def-fixed-version">fixed version</a>.</li>
+<li id="fr-01-07"><span class="legacy-anchor" id="sys-03" aria-hidden="true"></span><span class="legacy-anchor" id="evd-02" aria-hidden="true"></span><span class="legacy-anchor" id="evd-03" aria-hidden="true"></span><span class="legacy-anchor" id="evd-04" aria-hidden="true"></span><strong>FR-01.07:</strong> The system shall record the observed <a href="#def-evidence">failure evidence</a>, identified <a href="#def-broken-code">fault location</a>, <a href="#def-target-function">target function or method</a>, and corresponding source location in the <a href="#def-fixed-version">fixed version</a>.</li>
+<li id="fr-01-08"><span class="legacy-anchor" id="sys-02" aria-hidden="true"></span><span class="legacy-anchor" id="ctx-03" aria-hidden="true"></span><strong>FR-01.08:</strong> If a required input is unavailable, a required source location cannot be identified, or the original failure cannot be reproduced as required by <a href="#fr-01-06">FR-01.06</a>, the system shall stop processing that bug and report the missing input or failed check.</li>
+</ul>
+<p><strong>Verification example:</strong> Select a known bug and inspect the recorded versions, <a href="#def-environment">environment</a>, and FAIL/PASS results. Repeat with a missing interpreter and with an original test that passes on the <a href="#def-buggy-version">buggy version</a>; neither case may proceed to generation.</p>
+</div>
+</details>
+<h2 id="fr-02"><span class="legacy-anchor" id="sys-05" aria-hidden="true"></span>FR-02 — Generate positive and negative candidate tests</h2>
+<p><strong>The system shall generate positive and negative candidate tests for the selected bug using its recorded source and failure evidence.</strong></p>
+<details class="subrequirements">
+<summary>Sub-requirements and verification</summary>
+<div class="requirement-details">
+<ul>
+<li id="fr-02-01"><strong>FR-02.01:</strong> The system shall accept a target number of <a href="#def-valid-test">valid tests</a> and a maximum number of generation attempts separately for positive and <a href="#def-negative-test">negative tests</a>; each value shall be a positive integer.</li>
+<li id="fr-02-02"><span class="legacy-anchor" id="sys-04" aria-hidden="true"></span><span class="legacy-anchor" id="ben-01" aria-hidden="true"></span><span class="legacy-anchor" id="ben-02" aria-hidden="true"></span><span class="legacy-anchor" id="ben-03" aria-hidden="true"></span><span class="legacy-anchor" id="gde-01" aria-hidden="true"></span><span class="legacy-anchor" id="gen-01" aria-hidden="true"></span><strong>FR-02.02:</strong> The system shall provide the generation process with the selected bug's <a href="#def-failing-test">original failing tests</a>, required test helpers, relevant source code, <a href="#def-evidence">failure evidence</a>, and intended test type.</li>
+<li id="fr-02-03"><span class="legacy-anchor" id="gde-03" aria-hidden="true"></span><strong>FR-02.03:</strong> The system shall request positive candidates that check specified behaviour of the <a href="#def-target-function">target function or method</a> expected to pass on both versions.</li>
+<li id="fr-02-04"><span class="legacy-anchor" id="gen-04" aria-hidden="true"></span><strong>FR-02.04:</strong> The system shall request negative candidates that check the intended corrected behaviour and are expected to fail on the <a href="#def-buggy-version">buggy version</a> because of the selected bug.</li>
+<li id="fr-02-05"><span class="legacy-anchor" id="sys-16" aria-hidden="true"></span><span class="legacy-anchor" id="gen-02" aria-hidden="true"></span><span class="legacy-anchor" id="out-05" aria-hidden="true"></span><strong>FR-02.05:</strong> The system shall record each candidate's identifier, bug identifier, intended type, executable test code, expected behaviour, and generation settings.</li>
+<li id="fr-02-06"><span class="legacy-anchor" id="gde-02" aria-hidden="true"></span><span class="legacy-anchor" id="gen-03" aria-hidden="true"></span><strong>FR-02.06:</strong> The system shall record a generation error for a response missing required candidate information and count that attempt toward the configured limit.</li>
+<li id="fr-02-07"><strong>FR-02.07:</strong> The system shall submit every complete candidate to <a href="#fr-03">FR-03</a> before counting it toward the valid-test target.</li>
+<li id="fr-02-08"><span class="legacy-anchor" id="sys-06" aria-hidden="true"></span><span class="legacy-anchor" id="lop-01" aria-hidden="true"></span><strong>FR-02.08:</strong> When another attempt is made after rejection, the system shall provide the generation process with the rejected candidate's code, execution results, and rejection reasons for that bug and test type.</li>
+<li id="fr-02-09"><span class="legacy-anchor" id="sys-13" aria-hidden="true"></span><span class="legacy-anchor" id="lop-02" aria-hidden="true"></span><span class="legacy-anchor" id="lop-03" aria-hidden="true"></span><span class="legacy-anchor" id="lop-04" aria-hidden="true"></span><strong>FR-02.09:</strong> The system shall stop generating a test type when its valid-test target is reached or its attempt limit is reached, whichever occurs first.</li>
+<li id="fr-02-10"><span class="legacy-anchor" id="sys-14" aria-hidden="true"></span><span class="legacy-anchor" id="out-01" aria-hidden="true"></span><span class="legacy-anchor" id="out-02" aria-hidden="true"></span><span class="legacy-anchor" id="out-03" aria-hidden="true"></span><strong>FR-02.10:</strong> The system shall record the number of attempts, accepted tests, rejected tests, generation errors, and the stopping reason for each test type, identifying any unmet target.</li>
+</ul>
+<p><strong>Verification example:</strong> Request two <a href="#def-valid-test">valid tests</a> of each type with a three-attempt limit per type. Check that accepted counts determine completion, invalid responses consume attempts, and a type with fewer than two accepted tests is reported as incomplete.</p>
+</div>
+</details>
+<h2 id="fr-03"><span class="legacy-anchor" id="sys-09" aria-hidden="true"></span>FR-03 — Validate generated candidate tests</h2>
+<p><strong>The system shall accept a generated candidate test only when execution on the buggy and fixed versions satisfies the acceptance conditions for its declared type.</strong></p>
+<details class="subrequirements">
+<summary>Sub-requirements and verification</summary>
+<div class="requirement-details">
+<ul>
+<li id="fr-03-01"><span class="legacy-anchor" id="sys-07" aria-hidden="true"></span><span class="legacy-anchor" id="run-01" aria-hidden="true"></span><span class="legacy-anchor" id="run-02" aria-hidden="true"></span><strong>FR-03.01:</strong> The system shall execute the same <a href="#def-candidate-test">candidate test</a> code against each recorded version using the corresponding <a href="#def-environment">environment</a> and restored initial test state.</li>
+<li id="fr-03-02"><span class="legacy-anchor" id="sys-08" aria-hidden="true"></span><span class="legacy-anchor" id="rel-01" aria-hidden="true"></span><strong>FR-03.02:</strong> The system shall record each execution's outcome, test-runner output, source version, <a href="#def-environment">environment</a>, and evidence of the source locations executed.</li>
+<li id="fr-03-03"><span class="legacy-anchor" id="sys-12" aria-hidden="true"></span><span class="legacy-anchor" id="run-03" aria-hidden="true"></span><strong>FR-03.03:</strong> The system shall stop a candidate execution that exceeds the configured time limit and record TIMEOUT.</li>
+<li id="fr-03-04"><span class="legacy-anchor" id="acc-03" aria-hidden="true"></span><strong>FR-03.04:</strong> The system shall accept a positive candidate if and only if it produces PASS on both versions and <a href="#def-coverage">coverage</a> evidence shows execution of the <a href="#def-target-function">target function or method</a> on both versions.</li>
+<li id="fr-03-05"><span class="legacy-anchor" id="rel-02" aria-hidden="true"></span><span class="legacy-anchor" id="acc-01" aria-hidden="true"></span><span class="legacy-anchor" id="acc-04" aria-hidden="true"></span><strong>FR-03.05:</strong> The system shall accept a negative candidate if and only if all of the following hold: it produces FAIL on the <a href="#def-buggy-version">buggy version</a>, produces PASS on the <a href="#def-fixed-version">fixed version</a>, reaches the buggy <a href="#def-broken-code">fault location</a>, executes the corresponding fixed location or containing function or method, and satisfies the recorded failure-matching rule.</li>
+<li id="fr-03-06"><span class="legacy-anchor" id="rel-03" aria-hidden="true"></span><strong>FR-03.06:</strong> The system shall record whether negative-test relevance was established by line <a href="#def-coverage">coverage</a>, function or method <a href="#def-coverage">coverage</a> on the <a href="#def-fixed-version">fixed version</a>, or a traceback identifying the buggy <a href="#def-broken-code">fault location</a>.</li>
+<li id="fr-03-07"><span class="legacy-anchor" id="sys-10" aria-hidden="true"></span><span class="legacy-anchor" id="acc-02" aria-hidden="true"></span><strong>FR-03.07:</strong> Before accepting negative candidates, the system shall record an executable failure-matching rule derived from the original failure. The rule shall specify the exception or assertion category, the compared message or observed-value fields, and every permitted normalization or variable-field exclusion. Missing evidence shall produce an unmet check rather than an automatic match.</li>
+<li id="fr-03-08"><strong>FR-03.08:</strong> The system shall reject a candidate if either execution produces ERROR, TIMEOUT, or NOT EXECUTED, or if any acceptance condition for its declared type is unmet.</li>
+<li id="fr-03-09"><span class="legacy-anchor" id="sys-11" aria-hidden="true"></span><span class="legacy-anchor" id="acc-05" aria-hidden="true"></span><strong>FR-03.09:</strong> The system shall record each candidate's acceptance decision and the evidence for every applicable check, including each rejection reason.</li>
+<li id="fr-03-10"><span class="legacy-anchor" id="sys-15" aria-hidden="true"></span><span class="legacy-anchor" id="out-04" aria-hidden="true"></span><strong>FR-03.10:</strong> The system shall save accepted test code with its validation record and use only that validated code in the repair stage; changed test code shall require revalidation.</li>
+</ul>
+<p>The execution matrix below is necessary but not sufficient: relevance and failure matching still apply.</p>
+<div class="table-scroll" role="region" aria-label="Requirements reference table" tabindex="0"><table>
+<thead>
+<tr>
+<th>Declared type</th>
+<th>Buggy version</th>
+<th>Fixed version</th>
+<th>Decision from execution outcomes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Positive</td>
+<td>PASS</td>
+<td>PASS</td>
+<td>Eligible if the positive relevance checks also pass</td>
+</tr>
+<tr>
+<td>Negative</td>
+<td>FAIL</td>
+<td>PASS</td>
+<td>Eligible if the negative relevance and failure-matching checks also pass</td>
+</tr>
+<tr>
+<td>Either</td>
+<td>Any other combination</td>
+<td></td>
+<td>Reject</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Verification example:</strong> Supply a relevant PASS/PASS positive, a matching FAIL/PASS negative, an unrelated FAIL/PASS candidate, a skipped test, and a test with a missing dependency. Only the first two may be accepted. A positive candidate with FAIL/PASS results is rejected as a positive; it is not silently relabelled.</p>
+</div>
+</details>
+<h2 id="fr-04">FR-04 — Generate candidate patches using validated tests</h2>
+<p><strong>The system shall invoke the selected repair tool on the buggy version using the validated positive and negative tests and collect the candidate patches returned by the tool.</strong></p>
+<details class="subrequirements">
+<summary>Sub-requirements and verification</summary>
+<div class="requirement-details">
+<ul>
+<li id="fr-04-01"><strong>FR-04.01:</strong> The system shall accept the repair-tool identifier, invocation settings, and execution time limit for the repair run.</li>
+<li id="fr-04-02"><strong>FR-04.02:</strong> The system shall start repair only when at least one valid <a href="#def-positive-test">positive test</a> and one valid <a href="#def-negative-test">negative test</a> are available for the same bug instance and recorded versions.</li>
+<li id="fr-04-03"><strong>FR-04.03:</strong> If <a href="#fr-04-02">FR-04.02</a> is unmet, the system shall record that repair was not started and identify the missing test type.</li>
+<li id="fr-04-04"><strong>FR-04.04:</strong> The system shall supply a copy of the <a href="#def-buggy-version">buggy version</a> and the accepted positive and <a href="#def-negative-test">negative tests</a> to the <a href="#def-repair-tool">repair tool</a>, preserving their identities and executable behaviour during any required input-format conversion.</li>
+<li id="fr-04-05"><strong>FR-04.05:</strong> The system shall record the exact test set, <a href="#def-failing-test">original failing tests</a> if supplied, repair-tool version, settings, and source snapshot used for the invocation.</li>
+<li id="fr-04-06"><strong>FR-04.06:</strong> The system shall invoke the tool and record its completion status and output, distinguishing returned patches, completion without a patch, execution error, and timeout.</li>
+<li id="fr-04-07"><strong>FR-04.07:</strong> The system shall terminate a repair invocation that exceeds its configured time limit and retain any complete patches already returned.</li>
+<li id="fr-04-08"><strong>FR-04.08:</strong> The system shall save each returned candidate patch with an identifier linking it to the bug, repair invocation, and test inputs, and provide its saved location to the user for manual evaluation.</li>
+<li id="fr-04-09"><strong>FR-04.09:</strong> The system shall produce a run report identifying generated-test counts, repair status, returned patch identifiers and locations, and incomplete stages.</li>
+</ul>
+<p><strong>Verification example:</strong> Use a repair-tool stub that captures its inputs and returns two patches. Confirm that it receives only accepted generated tests from the selected bug and that both patches are saved with their identifiers and locations in the run report. Repeat with no valid <a href="#def-negative-test">negative tests</a> and verify that the tool is not invoked.</p>
+</div>
+</details>
+<h2 id="fr-05"><span class="legacy-anchor" id="manual-evaluation" aria-hidden="true"></span>FR-05 — Evaluate candidate patches using developer tests</h2>
+<p><strong>Performed manually by the user after FR-04.</strong> This requirement describes the evaluation activity in the overall workflow; it does not require the system to automate patch evaluation.</p>
+<p><strong>The user shall evaluate each candidate patch by running the developer test suite against the patched version and recording whether all tests pass or any test fails.</strong></p>
+<details class="subrequirements">
+<summary>Sub-requirements and verification</summary>
+<div class="requirement-details">
+<ul>
+<li id="fr-05-01"><strong>FR-05.01:</strong> The user shall evaluate each candidate patch separately on a copy of the corresponding <a href="#def-buggy-version">buggy version</a> with that patch applied; a patched version supplied by the <a href="#def-repair-tool">repair tool</a> may be used directly.</li>
+<li id="fr-05-02"><strong>FR-05.02:</strong> The user shall run the <a href="#def-developer-test-suite">developer test suite</a> against the patched version using the project's test <a href="#def-environment">environment</a>.</li>
+<li id="fr-05-03"><strong>FR-05.03:</strong> The user shall record the patch as passing this evaluation if all tests pass, or failing this evaluation if any test fails, and associate the result with the evaluated patch.</li>
+<li id="fr-05-04"><strong>FR-05.04:</strong> If no test failure is observed but execution cannot complete or tests do not execute, the user shall record the evaluation as incomplete rather than passing.</li>
+</ul>
+<p>Passing the suite demonstrates that the patch satisfies those tests; it does not prove correctness for untested behaviour.</p>
+<p><strong>Verification example:</strong> Manually run the <a href="#def-developer-test-suite">developer test suite</a> on two candidate patches. Record a passing result for a patch on which all tests pass and a failing result for a patch on which at least one test fails.</p>
+</div>
+</details>
 <h2 id="definitions">Definitions</h2>
 <div class="table-scroll" role="region" aria-label="Requirements reference table" tabindex="0"><table>
 <thead>
@@ -167,6 +300,7 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 </tr>
 </tbody>
 </table></div>
+<h2 id="test-execution-outcomes">Test execution outcomes</h2>
 <p>A test execution has one of these outcomes:</p>
 <div class="table-scroll" role="region" aria-label="Requirements reference table" tabindex="0"><table>
 <thead>
@@ -199,108 +333,43 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 </tbody>
 </table></div>
 <p>A zero process exit code alone does not establish PASS. Expected-failure markers do not turn an unverified result into PASS.</p>
-<h2 id="fr-01"><span class="legacy-anchor" id="sys-01" aria-hidden="true"></span>FR-01 — Identify and prepare the bug</h2>
-<p><strong>The system shall identify and verify the buggy version, fixed version, original failing tests, and execution environment associated with the selected bug before generating tests.</strong></p>
-<ul>
-<li id="fr-01-01"><strong>FR-01.01:</strong> The system shall accept a project identifier, bug identifier, and, where required, variant identifier that together select one bug instance.</li>
-<li id="fr-01-02"><span class="legacy-anchor" id="ctx-01" aria-hidden="true"></span><strong>FR-01.02:</strong> The system shall record the locations and source revisions or content fingerprints of the selected buggy and fixed versions.</li>
-<li id="fr-01-03"><strong>FR-01.03:</strong> The system shall record the identifiers, source, and execution commands of the <a href="#def-failing-test">original failing tests</a> associated with that bug instance.</li>
-<li id="fr-01-04"><span class="legacy-anchor" id="ctx-02" aria-hidden="true"></span><strong>FR-01.04:</strong> The system shall record the <a href="#def-environment">environment</a> and execution configuration used for each version, including the interpreter and dependency versions.</li>
-<li id="fr-01-05"><span class="legacy-anchor" id="evd-01" aria-hidden="true"></span><strong>FR-01.05:</strong> The system shall execute each selected <a href="#def-failing-test">original failing test</a> on both versions and record the outcome of each execution.</li>
-<li id="fr-01-06"><strong>FR-01.06:</strong> The system shall permit test generation only when every selected <a href="#def-failing-test">original failing test</a> produces FAIL on the <a href="#def-buggy-version">buggy version</a> and PASS on the <a href="#def-fixed-version">fixed version</a>.</li>
-<li id="fr-01-07"><span class="legacy-anchor" id="sys-03" aria-hidden="true"></span><span class="legacy-anchor" id="evd-02" aria-hidden="true"></span><span class="legacy-anchor" id="evd-03" aria-hidden="true"></span><span class="legacy-anchor" id="evd-04" aria-hidden="true"></span><strong>FR-01.07:</strong> The system shall record the observed <a href="#def-evidence">failure evidence</a>, identified <a href="#def-broken-code">fault location</a>, <a href="#def-target-function">target function or method</a>, and corresponding source location in the <a href="#def-fixed-version">fixed version</a>.</li>
-<li id="fr-01-08"><span class="legacy-anchor" id="sys-02" aria-hidden="true"></span><span class="legacy-anchor" id="ctx-03" aria-hidden="true"></span><strong>FR-01.08:</strong> If a required input is unavailable, a required source location cannot be identified, or the original failure cannot be reproduced as required by <a href="#fr-01-06">FR-01.06</a>, the system shall stop processing that bug and report the missing input or failed check.</li>
-</ul>
-<p><strong>Verification example:</strong> Select a known bug and inspect the recorded versions, <a href="#def-environment">environment</a>, and FAIL/PASS results. Repeat with a missing interpreter and with an original test that passes on the <a href="#def-buggy-version">buggy version</a>; neither case may proceed to generation.</p>
-<h2 id="fr-02"><span class="legacy-anchor" id="sys-05" aria-hidden="true"></span>FR-02 — Generate positive and negative candidate tests</h2>
-<p><strong>The system shall generate positive and negative candidate tests for the selected bug using its recorded source and failure evidence.</strong></p>
-<ul>
-<li id="fr-02-01"><strong>FR-02.01:</strong> The system shall accept a target number of <a href="#def-valid-test">valid tests</a> and a maximum number of generation attempts separately for positive and <a href="#def-negative-test">negative tests</a>; each value shall be a positive integer.</li>
-<li id="fr-02-02"><span class="legacy-anchor" id="sys-04" aria-hidden="true"></span><span class="legacy-anchor" id="ben-01" aria-hidden="true"></span><span class="legacy-anchor" id="ben-02" aria-hidden="true"></span><span class="legacy-anchor" id="ben-03" aria-hidden="true"></span><span class="legacy-anchor" id="gde-01" aria-hidden="true"></span><span class="legacy-anchor" id="gen-01" aria-hidden="true"></span><strong>FR-02.02:</strong> The system shall provide the generation process with the selected bug's <a href="#def-failing-test">original failing tests</a>, required test helpers, relevant source code, <a href="#def-evidence">failure evidence</a>, and intended test type.</li>
-<li id="fr-02-03"><span class="legacy-anchor" id="gde-03" aria-hidden="true"></span><strong>FR-02.03:</strong> The system shall request positive candidates that check specified behaviour of the <a href="#def-target-function">target function or method</a> expected to pass on both versions.</li>
-<li id="fr-02-04"><span class="legacy-anchor" id="gen-04" aria-hidden="true"></span><strong>FR-02.04:</strong> The system shall request negative candidates that check the intended corrected behaviour and are expected to fail on the <a href="#def-buggy-version">buggy version</a> because of the selected bug.</li>
-<li id="fr-02-05"><span class="legacy-anchor" id="sys-16" aria-hidden="true"></span><span class="legacy-anchor" id="gen-02" aria-hidden="true"></span><span class="legacy-anchor" id="out-05" aria-hidden="true"></span><strong>FR-02.05:</strong> The system shall record each candidate's identifier, bug identifier, intended type, executable test code, expected behaviour, and generation settings.</li>
-<li id="fr-02-06"><span class="legacy-anchor" id="gde-02" aria-hidden="true"></span><span class="legacy-anchor" id="gen-03" aria-hidden="true"></span><strong>FR-02.06:</strong> The system shall record a generation error for a response missing required candidate information and count that attempt toward the configured limit.</li>
-<li id="fr-02-07"><strong>FR-02.07:</strong> The system shall submit every complete candidate to <a href="#fr-03">FR-03</a> before counting it toward the valid-test target.</li>
-<li id="fr-02-08"><span class="legacy-anchor" id="sys-06" aria-hidden="true"></span><span class="legacy-anchor" id="lop-01" aria-hidden="true"></span><strong>FR-02.08:</strong> When another attempt is made after rejection, the system shall provide the generation process with the rejected candidate's code, execution results, and rejection reasons for that bug and test type.</li>
-<li id="fr-02-09"><span class="legacy-anchor" id="sys-13" aria-hidden="true"></span><span class="legacy-anchor" id="lop-02" aria-hidden="true"></span><span class="legacy-anchor" id="lop-03" aria-hidden="true"></span><span class="legacy-anchor" id="lop-04" aria-hidden="true"></span><strong>FR-02.09:</strong> The system shall stop generating a test type when its valid-test target is reached or its attempt limit is reached, whichever occurs first.</li>
-<li id="fr-02-10"><span class="legacy-anchor" id="sys-14" aria-hidden="true"></span><span class="legacy-anchor" id="out-01" aria-hidden="true"></span><span class="legacy-anchor" id="out-02" aria-hidden="true"></span><span class="legacy-anchor" id="out-03" aria-hidden="true"></span><strong>FR-02.10:</strong> The system shall record the number of attempts, accepted tests, rejected tests, generation errors, and the stopping reason for each test type, identifying any unmet target.</li>
-</ul>
-<p><strong>Verification example:</strong> Request two <a href="#def-valid-test">valid tests</a> of each type with a three-attempt limit per type. Check that accepted counts determine completion, invalid responses consume attempts, and a type with fewer than two accepted tests is reported as incomplete.</p>
-<h2 id="fr-03"><span class="legacy-anchor" id="sys-09" aria-hidden="true"></span>FR-03 — Validate generated candidate tests</h2>
-<p><strong>The system shall accept a generated candidate test only when execution on the buggy and fixed versions satisfies the acceptance conditions for its declared type.</strong></p>
-<ul>
-<li id="fr-03-01"><span class="legacy-anchor" id="sys-07" aria-hidden="true"></span><span class="legacy-anchor" id="run-01" aria-hidden="true"></span><span class="legacy-anchor" id="run-02" aria-hidden="true"></span><strong>FR-03.01:</strong> The system shall execute the same <a href="#def-candidate-test">candidate test</a> code against each recorded version using the corresponding <a href="#def-environment">environment</a> and restored initial test state.</li>
-<li id="fr-03-02"><span class="legacy-anchor" id="sys-08" aria-hidden="true"></span><span class="legacy-anchor" id="rel-01" aria-hidden="true"></span><strong>FR-03.02:</strong> The system shall record each execution's outcome, test-runner output, source version, <a href="#def-environment">environment</a>, and evidence of the source locations executed.</li>
-<li id="fr-03-03"><span class="legacy-anchor" id="sys-12" aria-hidden="true"></span><span class="legacy-anchor" id="run-03" aria-hidden="true"></span><strong>FR-03.03:</strong> The system shall stop a candidate execution that exceeds the configured time limit and record TIMEOUT.</li>
-<li id="fr-03-04"><span class="legacy-anchor" id="acc-03" aria-hidden="true"></span><strong>FR-03.04:</strong> The system shall accept a positive candidate if and only if it produces PASS on both versions and <a href="#def-coverage">coverage</a> evidence shows execution of the <a href="#def-target-function">target function or method</a> on both versions.</li>
-<li id="fr-03-05"><span class="legacy-anchor" id="rel-02" aria-hidden="true"></span><span class="legacy-anchor" id="acc-01" aria-hidden="true"></span><span class="legacy-anchor" id="acc-04" aria-hidden="true"></span><strong>FR-03.05:</strong> The system shall accept a negative candidate if and only if all of the following hold: it produces FAIL on the <a href="#def-buggy-version">buggy version</a>, produces PASS on the <a href="#def-fixed-version">fixed version</a>, reaches the buggy <a href="#def-broken-code">fault location</a>, executes the corresponding fixed location or containing function or method, and satisfies the recorded failure-matching rule.</li>
-<li id="fr-03-06"><span class="legacy-anchor" id="rel-03" aria-hidden="true"></span><strong>FR-03.06:</strong> The system shall record whether negative-test relevance was established by line <a href="#def-coverage">coverage</a>, function or method <a href="#def-coverage">coverage</a> on the <a href="#def-fixed-version">fixed version</a>, or a traceback identifying the buggy <a href="#def-broken-code">fault location</a>.</li>
-<li id="fr-03-07"><span class="legacy-anchor" id="sys-10" aria-hidden="true"></span><span class="legacy-anchor" id="acc-02" aria-hidden="true"></span><strong>FR-03.07:</strong> Before accepting negative candidates, the system shall record an executable failure-matching rule derived from the original failure. The rule shall specify the exception or assertion category, the compared message or observed-value fields, and every permitted normalization or variable-field exclusion. Missing evidence shall produce an unmet check rather than an automatic match.</li>
-<li id="fr-03-08"><strong>FR-03.08:</strong> The system shall reject a candidate if either execution produces ERROR, TIMEOUT, or NOT EXECUTED, or if any acceptance condition for its declared type is unmet.</li>
-<li id="fr-03-09"><span class="legacy-anchor" id="sys-11" aria-hidden="true"></span><span class="legacy-anchor" id="acc-05" aria-hidden="true"></span><strong>FR-03.09:</strong> The system shall record each candidate's acceptance decision and the evidence for every applicable check, including each rejection reason.</li>
-<li id="fr-03-10"><span class="legacy-anchor" id="sys-15" aria-hidden="true"></span><span class="legacy-anchor" id="out-04" aria-hidden="true"></span><strong>FR-03.10:</strong> The system shall save accepted test code with its validation record and use only that validated code in the repair stage; changed test code shall require revalidation.</li>
-</ul>
-<p>The execution matrix below is necessary but not sufficient: relevance and failure matching still apply.</p>
-<div class="table-scroll" role="region" aria-label="Requirements reference table" tabindex="0"><table>
-<thead>
-<tr>
-<th>Declared type</th>
-<th>Buggy version</th>
-<th>Fixed version</th>
-<th>Decision from execution outcomes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Positive</td>
-<td>PASS</td>
-<td>PASS</td>
-<td>Eligible if the positive relevance checks also pass</td>
-</tr>
-<tr>
-<td>Negative</td>
-<td>FAIL</td>
-<td>PASS</td>
-<td>Eligible if the negative relevance and failure-matching checks also pass</td>
-</tr>
-<tr>
-<td>Either</td>
-<td>Any other combination</td>
-<td></td>
-<td>Reject</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Verification example:</strong> Supply a relevant PASS/PASS positive, a matching FAIL/PASS negative, an unrelated FAIL/PASS candidate, a skipped test, and a test with a missing dependency. Only the first two may be accepted. A positive candidate with FAIL/PASS results is rejected as a positive; it is not silently relabelled.</p>
-<h2 id="fr-04">FR-04 — Generate candidate patches using validated tests</h2>
-<p><strong>The system shall invoke the selected repair tool on the buggy version using the validated positive and negative tests and collect the candidate patches returned by the tool.</strong></p>
-<ul>
-<li id="fr-04-01"><strong>FR-04.01:</strong> The system shall accept the repair-tool identifier, invocation settings, and execution time limit for the repair run.</li>
-<li id="fr-04-02"><strong>FR-04.02:</strong> The system shall start repair only when at least one valid <a href="#def-positive-test">positive test</a> and one valid <a href="#def-negative-test">negative test</a> are available for the same bug instance and recorded versions.</li>
-<li id="fr-04-03"><strong>FR-04.03:</strong> If <a href="#fr-04-02">FR-04.02</a> is unmet, the system shall record that repair was not started and identify the missing test type.</li>
-<li id="fr-04-04"><strong>FR-04.04:</strong> The system shall supply a copy of the <a href="#def-buggy-version">buggy version</a> and the accepted positive and <a href="#def-negative-test">negative tests</a> to the <a href="#def-repair-tool">repair tool</a>, preserving their identities and executable behaviour during any required input-format conversion.</li>
-<li id="fr-04-05"><strong>FR-04.05:</strong> The system shall record the exact test set, <a href="#def-failing-test">original failing tests</a> if supplied, repair-tool version, settings, and source snapshot used for the invocation.</li>
-<li id="fr-04-06"><strong>FR-04.06:</strong> The system shall invoke the tool and record its completion status and output, distinguishing returned patches, completion without a patch, execution error, and timeout.</li>
-<li id="fr-04-07"><strong>FR-04.07:</strong> The system shall terminate a repair invocation that exceeds its configured time limit and retain any complete patches already returned.</li>
-<li id="fr-04-08"><strong>FR-04.08:</strong> The system shall save each returned candidate patch with an identifier linking it to the bug, repair invocation, and test inputs, and provide its saved location to the user for manual evaluation.</li>
-<li id="fr-04-09"><strong>FR-04.09:</strong> The system shall produce a run report identifying generated-test counts, repair status, returned patch identifiers and locations, and incomplete stages.</li>
-</ul>
-<p><strong>Verification example:</strong> Use a repair-tool stub that captures its inputs and returns two patches. Confirm that it receives only accepted generated tests from the selected bug and that both patches are saved with their identifiers and locations in the run report. Repeat with no valid <a href="#def-negative-test">negative tests</a> and verify that the tool is not invoked.</p>
-<h2 id="fr-05"><span class="legacy-anchor" id="manual-evaluation" aria-hidden="true"></span>FR-05 — Evaluate candidate patches using developer tests</h2>
-<p><strong>Performed manually by the user after FR-04.</strong> This requirement describes the evaluation activity in the overall workflow; it does not require the system to automate patch evaluation.</p>
-<p><strong>The user shall evaluate each candidate patch by running the developer test suite against the patched version and recording whether all tests pass or any test fails.</strong></p>
-<ul>
-<li id="fr-05-01"><strong>FR-05.01:</strong> The user shall evaluate each candidate patch separately on a copy of the corresponding <a href="#def-buggy-version">buggy version</a> with that patch applied; a patched version supplied by the <a href="#def-repair-tool">repair tool</a> may be used directly.</li>
-<li id="fr-05-02"><strong>FR-05.02:</strong> The user shall run the <a href="#def-developer-test-suite">developer test suite</a> against the patched version using the project's test <a href="#def-environment">environment</a>.</li>
-<li id="fr-05-03"><strong>FR-05.03:</strong> The user shall record the patch as passing this evaluation if all tests pass, or failing this evaluation if any test fails, and associate the result with the evaluated patch.</li>
-<li id="fr-05-04"><strong>FR-05.04:</strong> If no test failure is observed but execution cannot complete or tests do not execute, the user shall record the evaluation as incomplete rather than passing.</li>
-</ul>
-<p>Passing the suite demonstrates that the patch satisfies those tests; it does not prove correctness for untested behaviour.</p>
-<p><strong>Verification example:</strong> Manually run the <a href="#def-developer-test-suite">developer test suite</a> on two candidate patches. Record a passing result for a patch on which all tests pass and a failing result for a patch on which at least one test fails.</p>
 
 <hr>
 <p class="footnote">Five workflow requirements, expanded into 41 detailed requirements. FR-01 to FR-04 describe automated system functions. FR-05 describes manual patch evaluation by the user. Previous requirement links lead to the corresponding section in this revision.</p>
 </main>
+<script>
+function revealLinkedRequirement() {
+  let id;
+  try { id = decodeURIComponent(window.location.hash.slice(1)); }
+  catch { return; }
+  const target = document.getElementById(id);
+  if (!target) return;
+  let container = target.closest('details');
+  let expanded = false;
+  while (container) {
+    if (!container.open) {
+      container.open = true;
+      expanded = true;
+    }
+    container = container.parentElement?.closest('details');
+  }
+  if (expanded) target.scrollIntoView({ block: 'start' });
+}
+window.addEventListener('hashchange', revealLinkedRequirement);
+document.addEventListener('click', (event) => {
+  const link = event.target.closest('a[href^="#"]');
+  if (link && link.hash === window.location.hash) revealLinkedRequirement();
+});
+revealLinkedRequirement();
+let closedBeforePrint = [];
+window.addEventListener('beforeprint', () => {
+  closedBeforePrint = Array.from(document.querySelectorAll('details:not([open])'));
+  closedBeforePrint.forEach((section) => { section.open = true; });
+});
+window.addEventListener('afterprint', () => {
+  closedBeforePrint.forEach((section) => { section.open = false; });
+  closedBeforePrint = [];
+});
+</script>
 </body>
 </html>
