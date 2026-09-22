@@ -136,7 +136,35 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <li id="fr-02-09"><span class="legacy-anchor" id="sys-13" aria-hidden="true"></span><span class="legacy-anchor" id="lop-02" aria-hidden="true"></span><span class="legacy-anchor" id="lop-03" aria-hidden="true"></span><span class="legacy-anchor" id="lop-04" aria-hidden="true"></span><strong>FR-02.09:</strong> The system shall stop generating a test type when its valid-test target is reached or its attempt limit is reached, whichever occurs first.</li>
 <li id="fr-02-10"><span class="legacy-anchor" id="sys-14" aria-hidden="true"></span><span class="legacy-anchor" id="out-01" aria-hidden="true"></span><span class="legacy-anchor" id="out-02" aria-hidden="true"></span><span class="legacy-anchor" id="out-03" aria-hidden="true"></span><strong>FR-02.10:</strong> The system shall record the number of attempts, accepted tests, rejected tests, generation errors, and the stopping reason for each test type, identifying any unmet target.</li>
 </ul>
-<p><strong>Verification example:</strong> Request two <a href="#def-valid-test">valid tests</a> of each type with a three-attempt limit per type. Check that accepted counts determine completion, invalid responses consume attempts, and a type with fewer than two accepted tests is reported as incomplete.</p>
+<p><strong>Verification example:</strong> Set the target to two accepted <a href="#def-positive-test">positive tests</a> and two accepted <a href="#def-negative-test">negative tests</a>. Allow at most three generation attempts for each type. Each attempt requests one <a href="#def-candidate-test">candidate test</a>. Check the following sequence:</p>
+<div class="table-scroll" role="region" aria-label="Requirements reference table" tabindex="0"><table>
+<thead>
+<tr>
+<th>Test type</th>
+<th>Attempt 1</th>
+<th>Attempt 2</th>
+<th>Attempt 3</th>
+<th>Expected result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Positive</td>
+<td>Accepted after validation</td>
+<td>Rejected after validation</td>
+<td>Accepted after validation</td>
+<td>Complete: two accepted positive tests</td>
+</tr>
+<tr>
+<td>Negative</td>
+<td>Response contains no test code</td>
+<td>Accepted after validation</td>
+<td>Rejected after validation</td>
+<td>Incomplete: one accepted negative test out of the two requested</td>
+</tr>
+</tbody>
+</table></div>
+<p>Positive-test generation stops after attempt 3 because its target is reached. Negative-test generation stops after attempt 3 because its attempt limit is reached. The response with no test code counts as one attempt and produces no accepted test. Neither type receives a fourth attempt.</p>
 </div>
 </details>
 <h2 id="fr-03"><span class="legacy-anchor" id="sys-09" aria-hidden="true"></span>FR-03 — Validate generated candidate tests</h2>
