@@ -90,7 +90,7 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <li><strong>Bug benchmark:</strong> supplies the buggy and fixed source versions and the <a href="#def-failing-test">original failing tests</a>.</li>
 <li><strong>Project environment:</strong> supplies the runtime, project dependencies, test runner, and <a href="#def-coverage">coverage</a> collection needed to execute the tests.</li>
 <li><strong>Language model:</strong> produces <a href="#def-candidate-test">candidate tests</a> from the supplied bug evidence.</li>
-<li><strong>Repair tool:</strong> accepts the buggy code and <a href="#def-valid-test">valid tests</a> and returns <a href="#def-candidate-patch">candidate patches</a> or an execution outcome.</li>
+<li><strong>Repair tool:</strong> accepts the buggy code and <a href="#def-valid-test">valid tests</a> and returns candidate patches or an execution outcome.</li>
 </ul>
 <h2 id="definitions">Definitions</h2>
 <div class="table-scroll" role="region" aria-label="Requirements reference table" tabindex="0"><table>
@@ -156,14 +156,6 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <tr id="def-repair-tool">
 <td>Repair tool</td>
 <td>A program, such as PyTER, that uses the buggy code and supplied tests to generate possible fixes.</td>
-</tr>
-<tr id="def-candidate-patch">
-<td>Candidate patch</td>
-<td>A change to the program produced by the repair tool as a possible fix for the bug.</td>
-</tr>
-<tr id="def-patched-version">
-<td>Patched version</td>
-<td>The buggy version with one candidate patch applied.</td>
 </tr>
 <tr id="def-developer-test-suite">
 <td>Developer test suite</td>
@@ -291,7 +283,7 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <li id="fr-04-05"><strong>FR-04.05:</strong> The system shall record the exact test set, <a href="#def-failing-test">original failing tests</a> if supplied, repair-tool version, settings, and source snapshot used for the invocation.</li>
 <li id="fr-04-06"><strong>FR-04.06:</strong> The system shall invoke the tool and record its completion status and output, distinguishing returned patches, completion without a patch, execution error, and timeout.</li>
 <li id="fr-04-07"><strong>FR-04.07:</strong> The system shall terminate a repair invocation that exceeds its configured time limit and retain any complete patches already returned.</li>
-<li id="fr-04-08"><strong>FR-04.08:</strong> The system shall save each returned <a href="#def-candidate-patch">candidate patch</a> with an identifier linking it to the bug, repair invocation, and test inputs, and provide its saved location to the user for manual evaluation.</li>
+<li id="fr-04-08"><strong>FR-04.08:</strong> The system shall save each returned candidate patch with an identifier linking it to the bug, repair invocation, and test inputs, and provide its saved location to the user for manual evaluation.</li>
 <li id="fr-04-09"><strong>FR-04.09:</strong> The system shall produce a run report identifying generated-test counts, repair status, returned patch identifiers and locations, and incomplete stages.</li>
 </ul>
 <p><strong>Verification example:</strong> Use a repair-tool stub that captures its inputs and returns two patches. Confirm that it receives only accepted generated tests from the selected bug and that both patches are saved with their identifiers and locations in the run report. Repeat with no valid <a href="#def-negative-test">negative tests</a> and verify that the tool is not invoked.</p>
@@ -299,13 +291,13 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <p><strong>Performed manually by the user after FR-04.</strong> This requirement describes the evaluation activity in the overall workflow; it does not require the system to automate patch evaluation.</p>
 <p><strong>The user shall evaluate each candidate patch by running the developer test suite against the patched version and recording whether all tests pass or any test fails.</strong></p>
 <ul>
-<li id="fr-05-01"><strong>FR-05.01:</strong> The user shall evaluate each <a href="#def-candidate-patch">candidate patch</a> separately on a copy of the corresponding <a href="#def-buggy-version">buggy version</a> with that patch applied; a <a href="#def-patched-version">patched version</a> supplied by the <a href="#def-repair-tool">repair tool</a> may be used directly.</li>
-<li id="fr-05-02"><strong>FR-05.02:</strong> The user shall run the <a href="#def-developer-test-suite">developer test suite</a> against the <a href="#def-patched-version">patched version</a> using the project's test <a href="#def-environment">environment</a>.</li>
+<li id="fr-05-01"><strong>FR-05.01:</strong> The user shall evaluate each candidate patch separately on a copy of the corresponding <a href="#def-buggy-version">buggy version</a> with that patch applied; a patched version supplied by the <a href="#def-repair-tool">repair tool</a> may be used directly.</li>
+<li id="fr-05-02"><strong>FR-05.02:</strong> The user shall run the <a href="#def-developer-test-suite">developer test suite</a> against the patched version using the project's test <a href="#def-environment">environment</a>.</li>
 <li id="fr-05-03"><strong>FR-05.03:</strong> The user shall record the patch as passing this evaluation if all tests pass, or failing this evaluation if any test fails, and associate the result with the evaluated patch.</li>
 <li id="fr-05-04"><strong>FR-05.04:</strong> If no test failure is observed but execution cannot complete or tests do not execute, the user shall record the evaluation as incomplete rather than passing.</li>
 </ul>
 <p>Passing the suite demonstrates that the patch satisfies those tests; it does not prove correctness for untested behaviour.</p>
-<p><strong>Verification example:</strong> Manually run the <a href="#def-developer-test-suite">developer test suite</a> on two <a href="#def-candidate-patch">candidate patches</a>. Record a passing result for a patch on which all tests pass and a failing result for a patch on which at least one test fails.</p>
+<p><strong>Verification example:</strong> Manually run the <a href="#def-developer-test-suite">developer test suite</a> on two candidate patches. Record a passing result for a patch on which all tests pass and a failing result for a patch on which at least one test fails.</p>
 
 <hr>
 <p class="footnote">Five workflow requirements, expanded into 41 detailed requirements. FR-01 to FR-04 describe automated system functions. FR-05 describes manual patch evaluation by the user. Previous requirement links lead to the corresponding section in this revision.</p>
