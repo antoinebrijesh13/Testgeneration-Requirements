@@ -202,19 +202,50 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <td>Eligible if the positive relevance checks also pass</td>
 </tr>
 <tr>
+<td>Positive</td>
+<td>PASS</td>
+<td>FAIL</td>
+<td>Reject: fails on the fixed version</td>
+</tr>
+<tr>
+<td>Positive</td>
+<td>FAIL</td>
+<td>PASS</td>
+<td>Reject: fails on the buggy version</td>
+</tr>
+<tr>
+<td>Positive</td>
+<td>FAIL</td>
+<td>FAIL</td>
+<td>Reject: fails on both versions</td>
+</tr>
+<tr>
+<td>Negative</td>
+<td>PASS</td>
+<td>PASS</td>
+<td>Reject: does not expose a failure on the buggy version</td>
+</tr>
+<tr>
+<td>Negative</td>
+<td>PASS</td>
+<td>FAIL</td>
+<td>Reject: passes on the buggy version and fails on the fixed version</td>
+</tr>
+<tr>
 <td>Negative</td>
 <td>FAIL</td>
 <td>PASS</td>
 <td>Eligible if the negative relevance and failure-matching checks also pass</td>
 </tr>
 <tr>
-<td>Either</td>
-<td>Any other combination</td>
-<td></td>
-<td>Reject</td>
+<td>Negative</td>
+<td>FAIL</td>
+<td>FAIL</td>
+<td>Reject: fails on the fixed version</td>
 </tr>
 </tbody>
 </table></div>
+<p>For both test types, reject the candidate if either execution produces ERROR, TIMEOUT, or NOT EXECUTED, regardless of the other execution's outcome.</p>
 <p><strong>Verification example:</strong> Supply a relevant PASS/PASS positive, a matching FAIL/PASS negative, an unrelated FAIL/PASS candidate, a skipped test, and a test with a missing dependency. Only the first two may be accepted. A positive candidate with FAIL/PASS results is rejected as a positive; it is not silently relabelled.</p>
 </div>
 </details>
