@@ -96,25 +96,25 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <h2 id="dependencies-and-inputs">Dependencies and inputs</h2>
 <ul>
 <li><strong>User:</strong> selects the project, bug, and variant where applicable, and supplies run settings.</li>
-<li><strong>Bug benchmark:</strong> supplies the buggy and fixed source versions and the <a href="#def-failing-test">original failing tests</a>.</li>
+<li><strong>Bug benchmark:</strong> supplies the buggy and fixed source versions and developer tests from which one failing test is selected.</li>
 <li><strong>Project environment:</strong> supplies the runtime, project dependencies, test runner, and <a href="#def-coverage">coverage</a> collection needed to execute the tests.</li>
 <li><strong>Language model:</strong> produces <a href="#def-candidate-test">candidate tests</a> from the supplied bug evidence.</li>
 <li><strong>Repair tool:</strong> accepts the buggy code and <a href="#def-valid-test">valid tests</a> and returns candidate patches or an execution outcome.</li>
 </ul>
 <h2 id="fr-01"><span class="legacy-anchor" id="sys-01" aria-hidden="true"></span>FR-01 — Identify and set up the bug</h2>
-<p><strong>The system shall identify and set up the buggy version, fixed version, original failing tests, and execution environment associated with the selected bug before generating tests.</strong></p>
+<p><strong>The system shall identify and set up the buggy version, fixed version, selected original failing test, and execution environment associated with the selected bug before generating tests.</strong></p>
 <details class="subrequirements">
 <summary>Details</summary>
 <div class="requirement-details">
 <ul>
 <li id="fr-01-01"><strong>FR-01.01:</strong> The system shall use the supplied project and bug <a href="#def-identifier">identifiers</a> to select the bug. If the bug has multiple variants, it shall also use the supplied variant <a href="#def-identifier">identifier</a>.</li>
 <li id="fr-01-02"><span class="legacy-anchor" id="ctx-01" aria-hidden="true"></span><strong>FR-01.02:</strong> The system shall record where the buggy and fixed versions are stored and identify the exact code used for each, using a revision <a href="#def-identifier">identifier</a> or a hash of the code.</li>
-<li id="fr-01-03"><strong>FR-01.03:</strong> The system shall save each <a href="#def-failing-test">original failing test</a>'s <a href="#def-identifier">identifier</a>, test code, and command for running it.</li>
+<li id="fr-01-03"><strong>FR-01.03:</strong> The system shall use one selected developer-written failing test for the bug and save its <a href="#def-identifier">identifier</a>, test code, and command for running it.</li>
 <li id="fr-01-04"><span class="legacy-anchor" id="ctx-02" aria-hidden="true"></span><strong>FR-01.04:</strong> The system shall record the <a href="#def-environment">environment</a> and settings used to run tests on each version, including the Python interpreter, its version, and the versions of required libraries.</li>
-<li id="fr-01-05"><span class="legacy-anchor" id="evd-01" aria-hidden="true"></span><strong>FR-01.05:</strong> The system shall run each <a href="#def-failing-test">original failing test</a> on both versions and record each result.</li>
-<li id="fr-01-06"><strong>FR-01.06:</strong> The system shall begin generating tests only after every <a href="#def-failing-test">original failing test</a> fails on the <a href="#def-buggy-version">buggy version</a> and passes on the <a href="#def-fixed-version">fixed version</a>.</li>
+<li id="fr-01-05"><span class="legacy-anchor" id="evd-01" aria-hidden="true"></span><strong>FR-01.05:</strong> The system shall run the selected <a href="#def-failing-test">original failing test</a> on both versions and record each result.</li>
+<li id="fr-01-06"><strong>FR-01.06:</strong> The system shall begin generating tests only after the selected <a href="#def-failing-test">original failing test</a> fails on the <a href="#def-buggy-version">buggy version</a> and passes on the <a href="#def-fixed-version">fixed version</a>.</li>
 <li id="fr-01-07"><span class="legacy-anchor" id="sys-03" aria-hidden="true"></span><span class="legacy-anchor" id="evd-02" aria-hidden="true"></span><span class="legacy-anchor" id="evd-03" aria-hidden="true"></span><span class="legacy-anchor" id="evd-04" aria-hidden="true"></span><strong>FR-01.07:</strong> The system shall record the <a href="#def-evidence">failure evidence</a>, <a href="#def-broken-code">fault location</a>, <a href="#def-target-function">target function or method</a>, and matching code location in the <a href="#def-fixed-version">fixed version</a>.</li>
-<li id="fr-01-08"><span class="legacy-anchor" id="sys-02" aria-hidden="true"></span><span class="legacy-anchor" id="ctx-03" aria-hidden="true"></span><strong>FR-01.08:</strong> The system shall stop processing the bug if a required input is missing, a required code location cannot be found, or the original tests do not meet <a href="#fr-01-06">FR-01.06</a>. It shall report which input is missing or which check failed.</li>
+<li id="fr-01-08"><span class="legacy-anchor" id="sys-02" aria-hidden="true"></span><span class="legacy-anchor" id="ctx-03" aria-hidden="true"></span><strong>FR-01.08:</strong> The system shall stop processing the bug if a required input is missing, a required code location cannot be found, or the selected test does not meet <a href="#fr-01-06">FR-01.06</a>. It shall report which input is missing or which check failed.</li>
 </ul>
 <p><strong>Verification example:</strong> Select a known bug and inspect the recorded versions, <a href="#def-environment">environment</a>, and FAIL/PASS results. Repeat with a missing interpreter and with an original test that passes on the <a href="#def-buggy-version">buggy version</a>; neither case may proceed to generation.</p>
 </div>
@@ -126,7 +126,7 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <div class="requirement-details">
 <ul>
 <li id="fr-02-01"><strong>FR-02.01:</strong> The system shall accept a target number of <a href="#def-valid-test">valid tests</a> and an attempt limit for each test type. Each setting shall be a whole number greater than zero.</li>
-<li id="fr-02-02"><span class="legacy-anchor" id="sys-04" aria-hidden="true"></span><span class="legacy-anchor" id="ben-01" aria-hidden="true"></span><span class="legacy-anchor" id="ben-02" aria-hidden="true"></span><span class="legacy-anchor" id="ben-03" aria-hidden="true"></span><span class="legacy-anchor" id="gde-01" aria-hidden="true"></span><span class="legacy-anchor" id="gen-01" aria-hidden="true"></span><strong>FR-02.02:</strong> The system shall generate candidates using the selected bug's <a href="#def-failing-test">original failing tests</a>, any helper code those tests need, the relevant program code, the <a href="#def-evidence">failure evidence</a>, and the requested test type.</li>
+<li id="fr-02-02"><span class="legacy-anchor" id="sys-04" aria-hidden="true"></span><span class="legacy-anchor" id="ben-01" aria-hidden="true"></span><span class="legacy-anchor" id="ben-02" aria-hidden="true"></span><span class="legacy-anchor" id="ben-03" aria-hidden="true"></span><span class="legacy-anchor" id="gde-01" aria-hidden="true"></span><span class="legacy-anchor" id="gen-01" aria-hidden="true"></span><strong>FR-02.02:</strong> The system shall generate candidates using the selected <a href="#def-failing-test">original failing test</a>, any helper code it needs, the relevant program code, the <a href="#def-evidence">failure evidence</a>, and the requested test type.</li>
 <li id="fr-02-03"><span class="legacy-anchor" id="gde-03" aria-hidden="true"></span><strong>FR-02.03:</strong> The system shall request positive candidates that check working behaviour in the <a href="#def-target-function">target function or method</a> and are expected to pass on both versions.</li>
 <li id="fr-02-04"><span class="legacy-anchor" id="gen-04" aria-hidden="true"></span><strong>FR-02.04:</strong> The system shall request negative candidates that check the expected behaviour after a fix and are expected to fail on the <a href="#def-buggy-version">buggy version</a> because of the selected bug.</li>
 <li id="fr-02-05"><span class="legacy-anchor" id="sys-16" aria-hidden="true"></span><span class="legacy-anchor" id="gen-02" aria-hidden="true"></span><span class="legacy-anchor" id="out-05" aria-hidden="true"></span><strong>FR-02.05:</strong> The system shall save each candidate's <a href="#def-identifier">identifier</a>, bug <a href="#def-identifier">identifier</a>, test type, test code, expected behaviour, and the settings used to generate it.</li>
@@ -299,7 +299,7 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 </tr>
 <tr id="def-failing-test">
 <td>Original failing test</td>
-<td>An existing test written by a developer that fails on the buggy version because of the selected bug.</td>
+<td>The one developer-written test selected to reproduce the bug. It fails on the buggy version because of that bug.</td>
 </tr>
 <tr id="def-coverage">
 <td>Coverage</td>
