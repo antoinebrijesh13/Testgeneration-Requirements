@@ -97,81 +97,81 @@ h2:target, tr:target, li:target { background-color: #eef2a5; }
 <thead>
 <tr>
 <th>Term</th>
-<th>Meaning in this specification</th>
+<th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr id="def-bug">
 <td>Bug</td>
-<td>The selected defect, identified by project, bug identifier, and variant identifier where variants exist.</td>
+<td>A problem in the program that causes it to behave incorrectly. In this project, each selected bug has an existing developer fix.</td>
 </tr>
 <tr id="def-buggy-version">
 <td>Buggy version</td>
-<td>The recorded source-code snapshot containing the selected defect, before the developer fix.</td>
+<td>The program's code before the developer fixed the selected bug.</td>
 </tr>
 <tr id="def-fixed-version">
 <td>Fixed version</td>
-<td>The recorded source-code snapshot containing the existing developer fix. It is the reference used to validate generated tests.</td>
+<td>The program's code after the developer fixed the selected bug. The system uses this version to check generated tests.</td>
 </tr>
 <tr id="def-failing-test">
 <td>Original failing test</td>
-<td>An existing developer test selected to reproduce the bug. A bug may have more than one such test.</td>
+<td>An existing test written by a developer that fails on the buggy version because of the selected bug.</td>
 </tr>
 <tr id="def-coverage">
 <td>Coverage</td>
-<td>A record of which source lines executed while a test ran.</td>
+<td>A record of the lines of code that ran during a test.</td>
 </tr>
 <tr id="def-environment">
 <td>Environment</td>
-<td>The runtime, dependencies, test runner, configuration, and external resources needed to execute the selected project's tests.</td>
+<td>The software, settings, and resources needed to run the project's tests, including Python, required libraries, and the test runner.</td>
 </tr>
 <tr id="def-evidence">
 <td>Failure evidence</td>
-<td>The original failing test's observed failure, including available exception or assertion details and source locations.</td>
+<td>Information recorded when the original failing test fails, such as the error message and where the failure occurred.</td>
 </tr>
 <tr id="def-broken-code">
 <td>Fault location</td>
-<td>The source file and executable line identified for the selected defect by the bug metadata and failure analysis. A traceback location alone does not establish the root cause.</td>
+<td>The file and line of code identified for the selected bug.</td>
 </tr>
 <tr id="def-target-function">
 <td>Target function or method</td>
-<td>The function or method identified for the selected bug and used to assess test relevance.</td>
+<td>The function or method that the generated tests are intended to exercise.</td>
 </tr>
 <tr id="def-candidate-test">
 <td>Candidate test</td>
-<td>A generated test awaiting an acceptance decision, with a declared intended type: positive or negative.</td>
+<td>A newly generated test that has not yet been accepted or rejected.</td>
 </tr>
 <tr id="def-positive-test">
 <td>Positive test</td>
-<td>A test that checks behaviour expected to remain working and passes on both the buggy and fixed versions.</td>
+<td>A test that checks behaviour that already works and passes on both the buggy and fixed versions.</td>
 </tr>
 <tr id="def-negative-test">
 <td>Negative test</td>
-<td>A test that exposes the selected bug: it fails on the buggy version and passes on the fixed version. “Negative” does not necessarily mean that its input is invalid.</td>
+<td>A test that fails on the buggy version because of the selected bug and passes on the fixed version.</td>
 </tr>
 <tr id="def-valid-test">
 <td>Valid test</td>
-<td>A candidate that satisfies every applicable acceptance condition in FR-03. Passing the fixed version alone is insufficient.</td>
+<td>A generated test that has passed all checks required for its type under FR-03.</td>
 </tr>
 <tr id="def-repair-tool">
 <td>Repair tool</td>
-<td>The external program invoked to produce candidate patches from buggy code and repair inputs; for example, PyTER.</td>
+<td>A program, such as PyTER, that uses the buggy code and supplied tests to generate possible fixes.</td>
 </tr>
 <tr id="def-candidate-patch">
 <td>Candidate patch</td>
-<td>A source-code change returned by the repair tool. It is distinct from the existing developer fix.</td>
+<td>A change to the program produced by the repair tool as a possible fix for the bug.</td>
 </tr>
 <tr id="def-patched-version">
 <td>Patched version</td>
-<td>A copy of the recorded buggy version with exactly one candidate patch applied.</td>
+<td>The buggy version with one candidate patch applied.</td>
 </tr>
 <tr id="def-developer-test-suite">
 <td>Developer test suite</td>
-<td>The project's developer-written tests that the user manually runs against a patched version. Generated tests are not developer tests.</td>
+<td>The collection of tests written by the project's developers, which the user runs manually to evaluate a candidate patch.</td>
 </tr>
 <tr id="def-run-record">
 <td>Run record</td>
-<td>The saved inputs, settings, artifacts, decisions, and outcomes associated with one execution of the workflow.</td>
+<td>The saved information about one workflow run, including its inputs, settings, generated tests, patches, and results.</td>
 </tr>
 </tbody>
 </table></div>
